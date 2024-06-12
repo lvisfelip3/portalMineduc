@@ -1,0 +1,11 @@
+{% extends 'verCursos.html' %}
+
+<h1>HOLA MUNDO</h1>
+{% block content %}
+<ul>
+    {%for user in usuario%}
+    <li><p>username:</p>{{user.username}}</li>
+    <li><p>password:</p>{{user.password}}</li>
+    {%endfor%}
+</ul>
+{% endblock %}

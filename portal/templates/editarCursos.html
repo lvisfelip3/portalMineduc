@@ -1,0 +1,12 @@
+{% extends "verCursos.html" %}
+{% block content %}
+<content style="display: flex; align-items: center; justify-content: center;">
+    <dialog open style="margin: 0; position: relative;">
+        <form method="POST">
+            {%csrf_token%}
+            {{form}}
+            <button type="submit" id="abrirPopup">Editar</button>
+        </form>
+    </dialog>
+</content>
+{% endblock %}
