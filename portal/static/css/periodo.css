@@ -332,6 +332,10 @@ dialog button:hover{
     transform: scale(1.05);
 }
 
+.errorlist{
+    display: none;
+}
+
 
 @media (max-width: 1500px){
 
@@ -393,7 +397,7 @@ dialog button:hover{
     }
 
     .table{
-        max-height: 422px;
+        max-height: 395px;
     }
 
     content .card {

@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/cursos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/periodo.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cursos</title>
+    <title>periodo</title>
     
     
 </head>
 <body>
     <header>
         <div class="links">
-        <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="{% url 'cursos' %}"></a>Cursos</h2>
+        <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="{% url 'periodo' %}"></a>Periodo</h2>
         </div>
         <div class="bloque">
             <a href="#">Claudia Galvez</a>
@@ -61,22 +61,29 @@
     {%block content%}
     <content>
         <div class="card">
-            <button id="abrirPopup"><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>Crear Curso</button>
+            <span style="display: inline; color: red;">{{error}}</span>
+            <button id="abrirPopup"><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>Crear Periodo</button>
             <div class="table">
                 <table>
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Sección</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
                             <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for c in cursos %}
+                        {% for p in periodo %}
                         <tr>
-                            <td><a href="{% url 'listaEst' c.id %}" id="materia">{{c.nombre}}</a></td>
-                            <td>{{c.seccion}}</td>
-                            <td><a href="{% url 'editarCursos' c.id %}"class="opcion">Editar</a><a href="{% url 'eliminarCursos' c.id %}"class="opcion">Eliminar</a></td>
+                            {%if p.predeterminado == True%}
+                            <td><ul><li><a href="" id="materia">{{p.nombre}}</a></li></ul></td>
+                            {%else%}
+                            <td><a href="" id="materia">{{p.nombre}}</a></td>
+                            {%endif%}
+                            <td>{{p.fecha_inicio}}</td>
+                            <td>{{p.fecha_fin}}</td>
+                            <td><a href=""class="opcion">Editar</a><a href=""class="opcion">Eliminar</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -91,7 +98,6 @@
             <form method="POST">
                 {% csrf_token %}
                 {{form}}
-                {{error}}
                 <button type="submit">Crear</button>
             </form>
             

@@ -14,4 +14,3 @@ dialog.addEventListener('mousedown', function(event) {
       dialog.close();
     }
   });
-
