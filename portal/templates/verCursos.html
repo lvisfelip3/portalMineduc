@@ -12,7 +12,7 @@
 <body>
     <header>
         <div class="links">
-        <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="{% url 'cursos' %}"></a>Cursos</h2>
+        <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="#"></a>Cursos</h2>
         </div>
         <div class="bloque">
             <a href="#">Claudia Galvez</a>
@@ -76,7 +76,7 @@
                         <tr>
                             <td><a href="{% url 'listaEst' c.id %}" id="materia">{{c.nombre}}</a></td>
                             <td>{{c.seccion}}</td>
-                            <td><a href="{% url 'editarCursos' c.id %}"class="opcion">Editar</a><a href="{% url 'eliminarCursos' c.id %}"class="opcion">Eliminar</a></td>
+                            <td><a href="{% url 'editarCursos' c.id c.periodo_id %}"class="opcion">Editar</a><a href="{% url 'eliminarCursos' c.id c.periodo_id%}"class="opcion">Eliminar</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

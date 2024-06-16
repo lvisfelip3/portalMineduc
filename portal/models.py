@@ -1,11 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,Group
+from django.db import transaction
 
 class Periodo(models.Model):
     nombre = models.CharField(max_length=20)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     predeterminado = models.BooleanField(default=False, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.predeterminado:
+            return super(Periodo, self).save(*args, **kwargs)
+        with transaction.atomic():
+            Periodo.objects.filter(
+                predeterminado=True).update(predeterminado=False)
+            return super(Periodo, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.nombre

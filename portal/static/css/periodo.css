@@ -188,6 +188,13 @@ table th{
     border-radius: 3px;
 }
 
+table li::marker{
+    margin:0;
+    content: '> ';
+    color: #664BFE;
+    font-weight: 700;
+}
+
 table th:last-child, table td:last-child{
     text-align: center;
 }

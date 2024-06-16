@@ -8,14 +8,15 @@ class crearCurso(forms.ModelForm):
 
     class Meta:
         model = Curso
-        fields = '__all__'
+        fields = ('nombre','seccion',)
 
-
+idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
 class CustomUserCreation(UserCreationForm):
     Usuario = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), widget=forms.Select)
+    Curso = forms.ModelMultipleChoiceField(queryset=Curso.objects.filter(periodo_id=idPeriodoSet[0]['id']), widget=forms.Select)
     class Meta:
         model = User
-        fields = ('username','curso','first_name','last_name','telefono',)
+        fields = ('username','first_name','last_name','telefono',)
 
 class crearPeriodo(forms.ModelForm):
     fecha_fin = forms.CharField(label='Fecha fin',required=True, widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'placeholder':'Ingresa una Fecha','type':'date'}))

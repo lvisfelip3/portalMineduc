@@ -126,7 +126,7 @@ content{
         "curso periodo"
         "asignatura registrar";
     gap: 80px;
-    padding:50px 100px 50px 100px;
+    padding:80px 110px;
 }
 
 .card {
@@ -178,7 +178,7 @@ content{
     grid-area: h3;
     margin: 0;
     margin-left: 30px;
-    font-size: 45px;
+    font-size: 52px;
     font-weight: 600;
 }
 
@@ -206,8 +206,8 @@ content{
 .card p{
     grid-area: descripcion;
     opacity: 0.7;
-    font-size: 16px;
-    margin: 0;
+    font-size: 27px;
+    margin: 0 0 0 30px;
 }
 
 @media (max-width: 1500px){
@@ -302,5 +302,9 @@ content{
         color: black;
         display: block;
         margin: 3px;
+    }
+
+    .card p{
+        font-size: 16px;
     }
 }
