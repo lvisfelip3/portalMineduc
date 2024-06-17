@@ -1,6 +1,6 @@
-{% extends "verCursos.html" %}
+{%extends "editarCursos.html"%}
 {%block links%}
-<h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2> > </h2>{%for p in periodo%}<h2 class="headerlink"><a href="{% url 'cursos' p.id%}"></a>{%endfor%}Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>{{curso.nombre}}</h2>
+<h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2><h2> > <h2 class="headerlink"><a href=""></a>Periodo</h2>
 {%endblock%}
 
 {% block content %}

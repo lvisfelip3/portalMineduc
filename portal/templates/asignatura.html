@@ -2,15 +2,17 @@
 <html lang="en">
 <head>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/periodo.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Portal Mineduc - Asignaturas</title>
+    
+    
 </head>
 <body>
     <header>
         <div class="links">
-            <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="{% url 'signup' %}"></a>Registrar Cuenta</h2>
+        <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2> > </h2> <h2 class="headerlink">{%for p in periodo%}<a href="{% url 'cursos' p.id%}"></a>{%endfor%}Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>Asignaturas</h2>
         </div>
         <div class="bloque">
             <a href="#">Claudia Galvez</a>
@@ -55,20 +57,48 @@
             {% endif %}
         </div>
     </aside>
-
+    
+    {%block content%}
     <content>
-        
         <div class="card">
-            {{error}}
+            <span style="display: inline; color: red;">{{error}}</span>
+            <button id="abrirPopup"><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>Crear Asignatura</button>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in asignatura %}
+                        <tr>
+                            <td><a href="" id="materia">{{a.nombre}}</a></td>
+                            <td><a href="{% url 'editarAsignatura' a.curso.id a.id %}"class="opcion">Editar</a><a href="{% url 'eliminarAsignatura' a.curso_id a.id %}"class="opcion">Eliminar</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
+    
+    
+        <dialog id="popup">
+            
             <form method="POST">
                 {% csrf_token %}
                 {{form}}
-                <button>Crear</button>
+                <button type="submit">Crear</button>
             </form>
-        </div>
+            
+        </dialog>
         
     </content>
+    {%endblock%}
     
+
+<script src="{% static 'js/dialog.js' %}"></script>
 </body>
 </html>

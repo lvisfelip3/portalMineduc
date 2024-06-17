@@ -74,7 +74,7 @@ aside .bloque:last-child{
 header{
     grid-area: header;
     display:grid;
-    grid-template-columns: 1fr 400px 120px;
+    grid-template-columns: 1fr 280px 120px;
     background-color: #FDFBF6;
     grid-template-areas: 
         "notas datos img";
@@ -94,7 +94,7 @@ header img{
 
 header h2{
     margin: 0;
-    font-size: 40px;
+    font-size: 33px;
     display:inline;
     transition: all 200ms;
     position: relative;
@@ -110,7 +110,7 @@ header h2 a{
 
 
 header .headerlink:first-child{
-    margin-left: 30px;
+    margin-left: 10px;
 }
 
 header .headerlink:hover{
@@ -386,8 +386,8 @@ dialog button:hover{
     }
     
     header h2{
-        margin-left: 25px;
-        font-size: 25px
+        margin-left: 5px;
+        font-size: 20px
     }
     
     header .bloque{

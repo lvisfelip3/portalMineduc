@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'portalMineduc.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'portalMineduc',
+        'NAME': 'portalmineduc',
         'USER': 'ministerio',
         'PASSWORD': 'A7bC2d9E',
         'HOST': 'localhost',

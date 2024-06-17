@@ -74,7 +74,7 @@ aside .bloque:last-child{
 header{
     grid-area: header;
     display:grid;
-    grid-template-columns: 1fr 400px 120px;
+    grid-template-columns: 1fr 280px 120px;
     background-color: #FDFBF6;
     grid-template-areas: 
         "notas datos img";
@@ -94,7 +94,7 @@ header img{
 
 header h2{
     margin: 0;
-    font-size: 40px;
+    font-size: 33px;
     display:inline;
     transition: all 200ms;
     position: relative;
@@ -110,7 +110,7 @@ header h2 a{
 
 
 header .headerlink:first-child{
-    margin-left: 30px;
+    margin-left: 10px;
 }
 
 header .headerlink:hover{
@@ -228,6 +228,17 @@ table td{
     margin-left: 5px;
     &:hover{
         background-color: #f30d6d;
+        transform: scale(1.03);
+    }
+}
+
+.card td .opcion:nth-child(2){
+    background-color: #008f37;
+    color: #FDFBF6;
+    transition: all 150ms;
+    margin-left: 5px;
+    &:hover{
+        background-color: #005004;
         transform: scale(1.03);
     }
 }
@@ -375,8 +386,8 @@ dialog button:hover{
     }
     
     header h2{
-        margin-left: 25px;
-        font-size: 25px
+        margin-left: 5px;
+        font-size: 20px
     }
     
     header .bloque{

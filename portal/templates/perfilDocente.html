@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{% static 'css/perfil_ri.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Mineduc - RI</title>
+    <title>Portal Mineduc - Docente</title>
     
     
 </head>
@@ -83,24 +83,16 @@
             <p>Registra, visualiza o elimina las asignaturas pertenecientes a la intitución</p>
         </div>
 
-        <div class="card" id="abrirPopup">
+        <div class="card">
             <span class="fondo_logo">
                 <svg width="65" height="65" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M14.875 7.375a2.375 2.375 0 1 1-4.75 0 2.375 2.375 0 0 1 4.75 0ZM17.25 15.775c0 1.8-2.127 3.267-4.75 3.267s-4.75-1.463-4.75-3.267c0-1.804 2.127-3.266 4.75-3.266s4.75 1.462 4.75 3.266ZM19.9 9.553a1.425 1.425 0 1 1-1.425-1.4c.78-.007 1.418.62 1.425 1.4v0ZM5.1 9.553a1.425 1.425 0 1 0 1.425-1.4 1.413 1.413 0 0 0-1.425 1.4Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.217 17.362a.75.75 0 1 0-.134 1.494l.134-1.494ZM22 15.775l.745.082a.747.747 0 0 0 0-.164l-.745.082Zm-2.917-3.08a.75.75 0 1 0 .134 1.494l-.134-1.494ZM5.917 18.856a.75.75 0 1 0-.134-1.494l.134 1.494ZM3 15.775l-.746-.082a.75.75 0 0 0 0 .164L3 15.775Zm2.783-1.586a.75.75 0 1 0 .134-1.494l-.134 1.494Zm13.3 4.667a3.381 3.381 0 0 0 3.663-3l-1.491-.163a1.881 1.881 0 0 1-2.038 1.669l-.134 1.494Zm3.663-3.163a3.38 3.38 0 0 0-3.663-2.998l.134 1.494a1.881 1.881 0 0 1 2.038 1.668l1.49-.164ZM5.782 17.362a1.881 1.881 0 0 1-2.037-1.669l-1.492.164a3.381 3.381 0 0 0 3.663 2.999l-.134-1.494Zm-2.037-1.505a1.881 1.881 0 0 1 2.037-1.668l.134-1.494a3.38 3.38 0 0 0-3.663 2.998l1.492.164Z" fill="white"/></svg>
             </span>
             <h3>Registrar Cuenta</h3>
             <p>Registra un usuario de tipo Estudiante o Profesor</p>
         </div>
-
-        <dialog id="popup">
-            
-            <span class="fondo_logo"><a href="{% url 'signupEstudiante' %}">Estudiante</a></span>
-            <span class="fondo_logo"><a href="{% url 'signupDocente' %}">DOCENTE</a></span>
-            <span class="fondo_logo"><a href="{% url 'signupRI' %}">RI</a></span>
-            
-        </dialog>
         
     </content>
 
-    <script src="{% static 'js/dialog.js' %}"></script>
+
 </body>
 </html>

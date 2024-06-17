@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Curso, User, Periodo
+from .models import Curso, User, Periodo, Asignatura
 from django.contrib.auth.models import Group
 
 class crearCurso(forms.ModelForm):
@@ -10,13 +10,23 @@ class crearCurso(forms.ModelForm):
         model = Curso
         fields = ('nombre','seccion',)
 
-idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
-class CustomUserCreation(UserCreationForm):
-    Usuario = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), widget=forms.Select)
-    Curso = forms.ModelMultipleChoiceField(queryset=Curso.objects.filter(periodo_id=idPeriodoSet[0]['id']), widget=forms.Select)
+class estudianteCreation(UserCreationForm):
+    fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento',required=True, widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'placeholder':'Ingresa una Fecha','type':'date'}))
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','telefono',)
+        fields = ('email','first_name','last_name','telefono','imagenPerfil','direccion')
+    
+class docenteCreation(UserCreationForm):
+    fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento',required=True, widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'placeholder':'Ingresa una Fecha','type':'date'}))
+    class Meta:
+        model = User
+        fields = ('email','first_name','last_name','telefono','imagenPerfil','direccion')
+
+class RICreation(UserCreationForm):
+    fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento',required=True, widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'placeholder':'Ingresa una Fecha','type':'date'}))
+    class Meta:
+        model = User
+        fields = ('email','first_name','last_name','telefono','imagenPerfil','direccion')
 
 class crearPeriodo(forms.ModelForm):
     fecha_fin = forms.CharField(label='Fecha fin',required=True, widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'placeholder':'Ingresa una Fecha','type':'date'}))
@@ -25,3 +35,8 @@ class crearPeriodo(forms.ModelForm):
     class Meta:
         model = Periodo
         fields = ('nombre','fecha_inicio','fecha_fin',)
+
+class crearAsignatura(forms.ModelForm):
+    class Meta:
+        model = Asignatura
+        fields = ('nombre',)

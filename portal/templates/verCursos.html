@@ -5,14 +5,14 @@
     <link rel="stylesheet" href="{% static 'css/cursos.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cursos</title>
+    <title>Portal Mineduc - Cursos</title>
     
     
 </head>
 <body>
     <header>
         <div class="links">
-        <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="#"></a>Cursos</h2>
+        {%block links%}<h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href=""></a>Cursos</h2>{%endblock%}
         </div>
         <div class="bloque">
             <a href="#">Claudia Galvez</a>
@@ -76,7 +76,10 @@
                         <tr>
                             <td><a href="{% url 'listaEst' c.id %}" id="materia">{{c.nombre}}</a></td>
                             <td>{{c.seccion}}</td>
-                            <td><a href="{% url 'editarCursos' c.id c.periodo_id %}"class="opcion">Editar</a><a href="{% url 'eliminarCursos' c.id c.periodo_id%}"class="opcion">Eliminar</a></td>
+                            <td><a href="{% url 'editarCursos' c.id c.periodo_id %}"class="opcion">Editar</a>
+                                <a href="{% url 'asignatura' c.id%}"class="opcion">Asignaturas</a>   
+                                <a href="{% url 'eliminarCursos' c.id c.periodo_id%}"class="opcion">Eliminar</a> 
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

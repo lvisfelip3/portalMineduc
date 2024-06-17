@@ -1,0 +1,16 @@
+{%extends "editarCursos.html"%}
+{%block links%}
+<h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2><h2> > </h2>{%for p in periodo%}<h2 class="headerlink"><a href="{% url 'cursos' p.id%}"></a>{%endfor%}Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href="{% url 'asignatura' asignatura.curso_id%}"></a>Asignaturas</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>{{asignatura.nombre}}</h2>
+{%endblock%}
+
+{% block content %}
+<content style="display: flex; align-items: center; justify-content: center;">
+    <dialog open style="margin: 0; position: relative;">
+        <form method="POST">
+            {%csrf_token%}
+            {{form}}
+            <button type="submit" id="abrirPopup">Editar</button>
+        </form>
+    </dialog>
+</content>
+{% endblock %}

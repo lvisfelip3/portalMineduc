@@ -2,17 +2,15 @@
 <html lang="en">
 <head>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/periodo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Mineduc - Periodos</title>
-    
-    
+    <title>Portal Mineduc - Crear Usuario</title>
 </head>
 <body>
     <header>
         <div class="links">
-        <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="{% url 'periodo' %}"></a>Periodo</h2>
+            {% block links %}<h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2> > </h2> <h2 class="headerlink"><a href="{% url 'signupEstudiante' %}"></a>Registrar Estudiante</h2>{% endblock %}
         </div>
         <div class="bloque">
             <a href="#">Claudia Galvez</a>
@@ -57,56 +55,28 @@
             {% endif %}
         </div>
     </aside>
-    
-    {%block content%}
-    <content>
-        <div class="card">
-            <span style="display: inline; color: red;">{{error}}</span>
-            <button id="abrirPopup"><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>Crear Periodo</button>
-            <div class="table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Fecha Inicio</th>
-                            <th>Fecha Fin</th>
-                            <th>Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for p in periodo %}
-                        <tr>
-                            {%if p.predeterminado == True%}
-                            <td><li><a href="{% url 'cursos' p.id %}" id="materia">{{p.nombre}}</a></li></td>
-                            {%else%}
-                            <td><a href="{% url 'cursos' p.id %}" id="materia">{{p.nombre}}</a></td>
-                            {%endif%}
-                            <td>{{p.fecha_inicio}}</td>
-                            <td>{{p.fecha_fin}}</td>
-                            <td><a href="{% url 'editarPeriodo' p.id %}"class="opcion">Editar</a><a href="{% url 'eliminarPeriodo' p.id %}"class="opcion">Eliminar</a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
-    
-    
-        <dialog id="popup">
-            
+    <content>
+        {% block content %}
+        <h1>soy estudiante</h1>
+        <div class="card">
+            {{error}}
+
             <form method="POST">
                 {% csrf_token %}
                 {{form}}
-                <button type="submit">Crear</button>
+                <label>Curso:
+                    <select name="curso">
+                        {% for c in curso %}
+                        <option value={{c.id}}>{{c.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <button>Crear</button>
             </form>
-            
-        </dialog>
-        
+        </div>
+        {% endblock %}
     </content>
-    {%endblock%}
     
-
-<script src="{% static 'js/dialog.js' %}"></script>
 </body>
 </html>

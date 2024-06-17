@@ -33,13 +33,13 @@ class Curso(models.Model):
         return self.nombre
 
 class User(AbstractUser):
-    edad = models.CharField(max_length=3, default='')
-    direccion = models.CharField(max_length=50, default='')
-    telefono = models.CharField(max_length=10, default='')
+    edad = models.IntegerField(null=True, blank=True)
+    fecha_nacimiento = models.DateField(null=True)
+    direccion = models.CharField(max_length=50, null=True)
+    telefono = models.CharField(max_length=10, null=True)
     imagenPerfil = models.ImageField(upload_to="imagen_perfil", null=True, blank=True)
-    curso = models.ForeignKey(Curso, on_delete=models.SET_NULL, null=True, default='')
-    groups = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, default='')
-
+    curso = models.ForeignKey(Curso, on_delete=models.SET_NULL, null=True)
+    groups = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.username
@@ -55,6 +55,7 @@ class Dia(models.Model):
 
 class Asignatura(models.Model):
     nombre = models.CharField(max_length=40)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, default='')
 
     def __str__(self):
         return self.nombre
