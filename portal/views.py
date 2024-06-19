@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group
-from .models import User, Curso, Periodo, Asignatura
+from .models import User, Curso, Periodo, Asignatura, Evaluacion
 from .forms import crearCurso, crearPeriodo, crearAsignatura, estudianteCreation, docenteCreation, RICreation
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.db import IntegrityError
@@ -46,7 +46,10 @@ def periodo(request):
             if form2 == 'on':
                 periodo1 = Periodo.objects.filter(nombre = nombre1).only('predeterminado')
                 periodo1 = True
-                guardar = Periodo.objects.create(nombre = request.POST["nombre"], fecha_inicio=request.POST["fecha_inicio"],fecha_fin=request.POST["fecha_fin"],predeterminado = periodo1)
+                guardar = Periodo.objects.create(nombre = request.POST["nombre"], 
+                                                 fecha_inicio=request.POST["fecha_inicio"],
+                                                 fecha_fin=request.POST["fecha_fin"],
+                                                 predeterminado = periodo1)
                 guardar.save()
                 return redirect('periodo')
             else:
@@ -54,9 +57,17 @@ def periodo(request):
                     form.save()
                     return redirect('periodo')
                 else:
-                    return render(request, 'periodo.html',{'form':form, 'periodo':periodo,'error':'Solo un Periodo puede ser predeterminado2'})
+                    return render(request, 
+                                  'periodo.html',
+                                  {'form':form, 
+                                   'periodo':periodo,
+                                   'error':'Solo un Periodo puede ser predeterminado2'})
         except IntegrityError:
-            return render(request, 'periodo.html',{'form':form, 'periodo':periodo,'error':'Solo un Periodo puede ser predeterminado3'})
+            return render(request, 
+                          'periodo.html',
+                          {'form':form, 
+                           'periodo':periodo,
+                           'error':'Solo un Periodo puede ser predeterminado3'})
     
 def editarPeriodo(request, periodo_id):
     if request.method == 'GET':
@@ -80,7 +91,9 @@ def editarPeriodo(request, periodo_id):
                 form.save()
                 return redirect('periodo')
         except ValueError:
-            return render(request, 'editarPeriodo.html', {'periodo':periodo, 'form': form, 'error':'Ha ocurrido un error con los parametros ingresados'})
+            return render(request, 'editarPeriodo.html', {'periodo':periodo, 
+                                                          'form': form, 
+                                                          'error':'Ha ocurrido un error con los parametros ingresados'})
 
 def eliminarPeriodo(request,periodo_id):
     periodo = Periodo.objects.get(pk=periodo_id)
@@ -172,13 +185,102 @@ def editarAsignatura(request, id_asignatura,id_curso):
             form.save()
             return redirect('asignatura',id_curso)
         except ValueError:
-            return render(request, 'asignatura.html',id_curso, {'curso':asignatura, 'form': form, 'error':'Ha ocurrido un error con los parametros ingresados'})
+            return render(request, 
+                          'asignatura.html',
+                          id_curso, 
+                          {'curso':asignatura, 
+                           'form': form, 
+                           'error':'Ha ocurrido un error con los parametros ingresados'})
         
 def eliminarAsignatura(request,id_asignatura,id_curso):
     asignatura = Asignatura.objects.get(pk=id_asignatura)
     asignatura.delete()
     return redirect('asignatura', id_curso)
 
+#--------------------------------
+#--------- NOTAS ----------------
+#--------------------------------
+
+def alumnosNotas(request, id_curso, asgn_id):
+    periodo = Periodo.objects.get(predeterminado=True)
+    verAsignaturas = get_object_or_404(Asignatura, curso_id=id_curso, pk=asgn_id)
+    estudiantes = User.objects.filter(curso_id=id_curso)
+    promedios = calcularPromedios(estudiantes, verAsignaturas.id, id_curso, periodo.id)
+
+    if request.method == 'GET':
+        print("PROMEDIO:",promedios)
+        return render(request, 'alumnosAsignaturas.html', {
+            'asignatura': verAsignaturas,
+            'estudiante': estudiantes,
+            'periodo': periodo,
+            'promedios': promedios 
+        })
+
+    try:
+        nota = int(request.POST["nota"])
+        if nota > 70 or nota < 10:
+            raise ValueError("Nota fuera de rango")
+    except (ValueError, TypeError):
+        return render(request, 'alumnosAsignaturas.html', {
+            'asignatura': verAsignaturas,
+            'estudiante': estudiantes,
+            'periodo': periodo,
+            'promedios': promedios,
+            'error': 'Ingrese un número válido'
+        })
+
+    evaluacion, created = Evaluacion.objects.get_or_create(
+        usuario_id=request.POST["id"],
+        asignatura_id=verAsignaturas.id,
+        curso_id=id_curso,
+        periodo_id=periodo.id,
+        defaults={'nota1': nota,}
+    )
+
+    if not created:
+        notas = ['nota2', 'nota3', 'nota4', 'nota5', 'nota6', 'nota7', 'nota8', 'nota9']
+        for field in notas:
+            if getattr(evaluacion, field) is None:
+                setattr(evaluacion, field, nota)
+                evaluacion.save()
+                return redirect('alumnosNotas', id_curso, asgn_id)
+        return render(request, 'alumnosAsignaturas.html', {
+            'asignatura': verAsignaturas,
+            'estudiante': estudiantes,
+            'periodo': periodo,
+            'promedios': promedios,
+            'error': 'Todas las notas están completas'
+        })
+        
+
+    return redirect('alumnosNotas', id_curso, asgn_id)
+
+def calcularPromedios(estudiantes, asignatura_id, curso_id, periodo_id):
+    promedios = {}
+    for estudiante in estudiantes:
+        evaluaciones = Evaluacion.objects.filter(
+            usuario_id=estudiante.id,
+            asignatura_id=asignatura_id,
+            curso_id=curso_id,
+            periodo_id=periodo_id
+        )
+        notas = []
+        for evaluacion in evaluaciones:
+            notas.extend([
+                evaluacion.nota1, evaluacion.nota2, evaluacion.nota3, evaluacion.nota4,
+                evaluacion.nota5, evaluacion.nota6, evaluacion.nota7, evaluacion.nota8,
+                evaluacion.nota9
+            ])
+        notas = [nota for nota in notas if nota is not None]
+        if notas:
+            promedio = round(sum(notas) / len(notas))
+            promedios[estudiante.id] = promedio
+            savePromedio = Evaluacion.objects.get(usuario_id = estudiante.id)
+            savePromedio.promedio = promedio
+            savePromedio.save()
+        else:
+            promedios[estudiante.id] = None
+    return promedios
 #--------------------------------------
 #--------- LOGIN Y REGISTRO -----------
 #--------------------------------------
@@ -196,7 +298,17 @@ def signupEstudiante(request):
                 username = request.POST["first_name"][:2]+'.'+request.POST["last_name"]+'E'
                 age = datetime.now().year - año.year
                 print(username)
-                user = User.objects.create_user( username = username, password=request.POST["password1"],edad = age, curso_id=request.POST["curso"], first_name = request.POST["first_name"],email = request.POST["email"], last_name = request.POST ["last_name"], telefono = request.POST["telefono"],imagenPerfil = request.POST["imagenPerfil"], direccion = request.POST["direccion"],fecha_nacimiento = request.POST["fecha_nacimiento"], groups_id = estudiante)
+                user = User.objects.create_user( username = username, 
+                                                password=request.POST["password1"],
+                                                edad = age, curso_id=request.POST["curso"], 
+                                                first_name = request.POST["first_name"],
+                                                email = request.POST["email"], 
+                                                last_name = request.POST ["last_name"], 
+                                                telefono = request.POST["telefono"],
+                                                imagenPerfil = request.POST["imagenPerfil"], 
+                                                direccion = request.POST["direccion"],
+                                                fecha_nacimiento = request.POST["fecha_nacimiento"], 
+                                                groups_id = estudiante)
                 user.save()
                 return redirect('perfil_ri')
             except IntegrityError:
@@ -216,7 +328,18 @@ def signupDocente(request):
                 docente = Group.objects.filter(name = "Docente").values("id")
                 username = request.POST["first_name"][:2]+'.'+request.POST["last_name"]+'D'
                 age = datetime.now().year - año.year
-                user = User.objects.create_user(username = username, password=request.POST["password1"],edad = age,first_name = request.POST["first_name"], last_name = request.POST ["last_name"],email = request.POST["email"], telefono = request.POST["telefono"],imagenPerfil = request.POST["imagenPerfil"], direccion = request.POST["direccion"],fecha_nacimiento = request.POST["fecha_nacimiento"],curso_id = request.POST["curso"],groups_id = docente)
+                user = User.objects.create_user(username = username, 
+                                                password=request.POST["password1"],
+                                                edad = age,
+                                                first_name = request.POST["first_name"], 
+                                                last_name = request.POST ["last_name"],
+                                                email = request.POST["email"], 
+                                                telefono = request.POST["telefono"],
+                                                imagenPerfil = request.POST["imagenPerfil"], 
+                                                direccion = request.POST["direccion"],
+                                                fecha_nacimiento = request.POST["fecha_nacimiento"],
+                                                curso_id = request.POST["curso"],
+                                                groups_id = docente)
                 user.save()
                 return redirect('perfil_ri')
             except IntegrityError:
@@ -234,7 +357,16 @@ def signupRI(request):
                 ri = Group.objects.filter(name = "Responsable Institucional").values("id")
                 username = request.POST["first_name"][:2]+'.'+request.POST["last_name"]+'RI'
                 age = datetime.now().year - año.year
-                user = User.objects.create_user( username = username, password=request.POST["password1"],edad = age,first_name = request.POST["first_name"], last_name = request.POST ["last_name"],email = request.POST["email"],telefono = request.POST["telefono"],direccion = request.POST["direccion"],fecha_nacimiento = request.POST["fecha_nacimiento"],groups_id = ri)
+                user = User.objects.create_user( username = username, 
+                                                password=request.POST["password1"],
+                                                edad = age,
+                                                first_name = request.POST["first_name"], 
+                                                last_name = request.POST ["last_name"],
+                                                email = request.POST["email"],
+                                                telefono = request.POST["telefono"],
+                                                direccion = request.POST["direccion"],
+                                                fecha_nacimiento = request.POST["fecha_nacimiento"],
+                                                groups_id = ri)
                 user.save()
                 return redirect('perfil_ri')
             except IntegrityError:

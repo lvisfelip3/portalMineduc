@@ -35,5 +35,6 @@ urlpatterns = [
     path('Ri/Curso<int:id_curso>/Asignaturas', views.asignatura, name = "asignatura"),
     path('Ri/Curso<int:id_curso>/Asignaturas/EditarAsignatura<int:id_asignatura>', views.editarAsignatura, name = "editarAsignatura"),
     path('Ri/Curso<int:id_curso>/Asignaturas/EliminarAsignatura<int:id_asignatura>', views.eliminarAsignatura, name = "eliminarAsignatura"),
+    path('Ri/Curso<int:id_curso>/Asignatura<int:asgn_id>/Notas', views.alumnosNotas, name = "alumnosNotas"),
 
 ]

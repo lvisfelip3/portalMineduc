@@ -7,6 +7,8 @@ body {
     display: grid;
     min-height: 100vh;
     max-height: 100vh;
+    min-height: 100dvh;
+    max-height: 100dvh;
     margin: 0;
     grid-template-columns: minmax(300px, 400px) 1fr;
     grid-template-rows: 115px 1fr;
@@ -60,8 +62,8 @@ aside a{
 }
 
 .lista:hover a, .lista:hover g{
-    color: #664BFE;
-    fill: #664BFE;
+    color: #593cff;
+    fill: #593cff;
 }
 
 aside .bloque:last-child{
@@ -101,6 +103,9 @@ header .bloque{
     font-size: 20px;
     padding: 0;
     list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
 }
 header a{
     text-decoration: none;
@@ -111,7 +116,6 @@ header a{
 
 header a:first-child{
     font-weight: bold;
-    align-self: end;
 }
 
 

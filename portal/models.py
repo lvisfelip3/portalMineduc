@@ -1,6 +1,5 @@
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import AbstractUser,Group
-from django.db import transaction
 
 class Periodo(models.Model):
     nombre = models.CharField(max_length=20)
@@ -74,10 +73,15 @@ class Clase(models.Model):
         return self.nombre
     
 class Evaluacion(models.Model):
-    nombre = models.CharField(max_length=20)
     nota1 = models.IntegerField(null=True, blank=True)
     nota2 = models.IntegerField(null=True, blank=True)
     nota3 = models.IntegerField(null=True, blank=True)
+    nota4 = models.IntegerField(null=True, blank=True)
+    nota5 = models.IntegerField(null=True, blank=True)
+    nota6 = models.IntegerField(null=True, blank=True)
+    nota7 = models.IntegerField(null=True, blank=True)
+    nota8 = models.IntegerField(null=True, blank=True)
+    nota9 = models.IntegerField(null=True, blank=True)
     promedio = models.IntegerField(null=True, blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
@@ -85,5 +89,5 @@ class Evaluacion(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.nombre
+        return str(self.id)
 

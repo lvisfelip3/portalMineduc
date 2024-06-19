@@ -132,6 +132,7 @@ header .bloque{
     flex-direction: column;
     align-items: end;
 }
+
 header a{
     text-decoration: none;
     color: black;
@@ -143,210 +144,98 @@ header a:first-child{
     font-weight: bold;
 }
 
-content {
+
+content{
+    grid-area: content;
     background: linear-gradient(to right, #cfd5d8, #768a9c);
+    padding: 80px 100px;
 }
-content .card {
-    margin: 10px 120px 20px 120px;
+
+.card {
+    background-color: #FDFBF6;
+    border-radius: 8px;
+    padding: 20px 24px;
+    max-height: 650px;
+    overflow: auto;
+    display: grid;
+    grid-template: min-content / 1fr;
+}
+
+content details{
+    font-size: 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    transition: 200ms all;
+    cursor: default;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: min-content;
     
+    #abrirPopup{
+        background-color: #FDFBF6;
+        font-size: 27px;
+        padding:10px 20px 10px 20px;
+        border-radius: 5px;
+        border: 0;
+        outline: none;
+        color: #222a30;
+        transition: all 130ms;
+        gap: 10px;
+        display: inline-block;
+        justify-self: end;
+    }
+
+    #abrirPopup:hover{
+        background-color: #222a30;
+        color: #FDFBF6;
+        transform: scale(1.05);
+    }
 }
 
-.table{
-    max-height: 700px;
-    overflow-y: auto;
-    border-radius: 8px 0 0 8px;
+content summary{
+    padding: 24px;
+
+    &::marker{
+        font-size: 20px;
+    }
+
+    p{
+        direction: rtl;
+        margin: 0;
+    }
 }
 
-div::-webkit-scrollbar {
+content details[open]{
+    background-color: #7966e2;
+    color: #FDFBF6;
+    padding: 0 0 24px 24px;
+}
+
+content details:last-child{
+    margin-bottom: 0;
+}
+
+#popup {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+}
+
+.card::-webkit-scrollbar {
     width: 9px;
     background-color: #FDFBF6;
     border-radius: 0 150px 150px 0;
   }
 
-.table::-webkit-scrollbar-thumb{
+.card::-webkit-scrollbar-thumb{
     border-radius: 150px;
     background-color: #222a30;
 }
 
-.table::-webkit-scrollbar-thumb:hover{
+.card::-webkit-scrollbar-thumb:hover{
     background-color: #593cff;
 }
-
-
-table{
-    width: 100%;
-    background-color: #FDFBF6;
-    border-radius: 8px 0 0 8px;
-    min-height: 200px;
-    padding: 25px;
-}
-
-table tbody tr{
-    line-height: 50px;
-}
-
-table th{
-    text-align: left;
-    font-size: 30px;
-    background-color: #d6d6d6;
-    border-radius: 3px;
-}
-
-table li::marker{
-    margin:0;
-    content: '> ';
-    color: #593cff;
-    font-weight: 700;
-}
-
-table th:last-child, table td:last-child{
-    text-align: center;
-}
-
-table td{
-    font-size: 30px;
-}
-
-.card td .opcion{
-    height: 40px;
-    width: 95px;
-    border: none;
-    outline: none;
-    font-size: 17px;
-    border-radius: 5px;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.card td .opcion:first-child{
-    background-color: #222a30;
-    color: #FDFBF6;
-    margin-right: 5px;
-    transition: all 150ms;
-    &:hover{
-        background-color: #7966e2;
-        transform: scale(1.03);
-    }
-}
-
-.card td .opcion:last-child{
-    background-color: #cf3072;
-    color: #FDFBF6;
-    transition: all 150ms;
-    margin-left: 5px;
-    &:hover{
-        background-color: #f30d6d;
-        transform: scale(1.03);
-    }
-}
-
-.card #materia{
-    text-decoration: none;
-    color: #222a30;
-    transition:all 200ms;
-    font-weight: 500;
-
-}
-
-.card #materia:hover{
-    color: #593cff;
-    transform:scale(1.03);
-}
-
-
-dialog{
-    border: 1px solid #ccc;
-    padding: 20px;
-    text-align: left;
-    align-content: center;
-    border-radius: 5px;
-}
-
-dialog::backdrop{
-    background-color: black;
-    opacity: 0.4;
-}
-
-dialog input{
-    border: none;
-    border-bottom: 2px solid #3C3C3C;
-    transition: all 200ms ease-in-out;
-    font-size: 20px;
-}
-
-dialog select{
-    border: 1px solid #ccc;
-    outline: none;
-    height: 30px;
-    width: 70px;
-    border-radius: 3px;
-}
-
-dialog select:focus{
-    background-color: #7966e2;
-    border: none;
-    outline: none;
-    color: white;
-    transition: all 200ms ease-in-out;
-}
-
-dialog div{
-    padding: 10px;
-    font-size: 20px;
-}
-
-dialog input:focus{
-    border: none;
-    border-bottom: 2px solid #593cff;
-    transition: 200ms;
-    outline: none;
-}
-
-dialog button{
-    background-color: #222a30;
-    font-size: 20px;
-    margin: 10px;
-    padding:10px 20px 10px 20px;
-    border-radius: 3px;
-    border: 1px solid #ccc;
-    outline: none;
-    color: white;
-    transition: all 200ms;
-}
-
-dialog button:hover{
-    background-color: #7966e2;
-    transform: scale(1.03);
-}
-
-#abrirPopup{
-    background-color: #222a30;
-    font-size: 20px;
-    margin: 20px 0 5px 0;
-    padding:10px 20px 10px 20px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    outline: none;
-    color: white;
-    transition: all 200ms;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-#abrirPopup:hover{
-    background-color: #593cff;
-    transform: scale(1.05);
-}
-
-.errorlist{
-    display: none;
-}
-
 
 @media (max-width: 1500px){
 
@@ -405,14 +294,5 @@ dialog button:hover{
         color: black;
         display: block;
         margin: 3px;
-    }
-
-    .table{
-        max-height: 395px;
-    }
-
-    content .card {
-        margin: 10px 70px 20px 70px;
-        
     }
 }

@@ -8,6 +8,8 @@ body {
     display: grid;
     min-height: 100vh;
     max-height: 100vh;
+    min-height: 100dvh;
+    max-height: 100dvh;
     margin: 0;
     grid-template-columns: minmax(300px, 400px) 1fr;
     grid-template-rows: 115px 1fr;
@@ -125,6 +127,9 @@ header .bloque{
     font-size: 20px;
     padding: 0;
     list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
 }
 header a{
     text-decoration: none;
@@ -135,7 +140,6 @@ header a{
 
 header a:first-child{
     font-weight: bold;
-    align-self: end;
 }
 
 

@@ -8,6 +8,8 @@ body {
     display: grid;
     min-height: 100vh;
     max-height: 100vh;
+    min-height: 100dvh;
+    max-height: 100dvh;
     margin: 0;
     grid-template-columns: minmax(300px, 400px) 1fr;
     grid-template-rows: 115px 1fr;
@@ -61,8 +63,8 @@ aside a{
 }
 
 .lista:hover a, .lista:hover g{
-    color: #664BFE;
-    fill: #664BFE;
+    color: #593cff;
+    fill: #593cff;
 }
 
 aside .bloque:last-child{
@@ -114,7 +116,7 @@ header .headerlink:first-child{
 }
 
 header .headerlink:hover{
-    color: #664BFE;
+    color: #593cff;
     transform: scale(1.1);
     cursor: default;
 }
@@ -126,6 +128,9 @@ header .bloque{
     font-size: 20px;
     padding: 0;
     list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
 }
 header a{
     text-decoration: none;
@@ -136,7 +141,6 @@ header a{
 
 header a:first-child{
     font-weight: bold;
-    align-self: end;
 }
 
 content {
@@ -165,7 +169,7 @@ div::-webkit-scrollbar {
 }
 
 .table::-webkit-scrollbar-thumb:hover{
-    background-color: #664BFE;
+    background-color: #593cff;
 }
 
 
@@ -216,7 +220,7 @@ table td{
     margin-right: 5px;
     transition: all 150ms;
     &:hover{
-        background-color: #664BFE;
+        background-color: #7966e2;
         transform: scale(1.03);
     }
 }
@@ -252,7 +256,7 @@ table td{
 }
 
 .card #materia:hover{
-    color: #664BFE;
+    color: #593cff;
     transform:scale(1.03);
 }
 
@@ -286,7 +290,7 @@ dialog select{
 }
 
 dialog select:focus{
-    background-color: #664BFE;
+    background-color: #593cff;
     border: none;
     outline: none;
     color: white;
@@ -300,7 +304,7 @@ dialog div{
 
 dialog input:focus{
     border: none;
-    border-bottom: 2px solid #664BFE;
+    border-bottom: 2px solid #593cff;
     transition: 200ms;
     outline: none;
 }
@@ -318,7 +322,7 @@ dialog button{
 }
 
 dialog button:hover{
-    background-color: #664BFE;
+    background-color: #7966e2;
     transform: scale(1.03);
 }
 
@@ -339,7 +343,7 @@ dialog button:hover{
 }
 
 #abrirPopup:hover{
-    background-color: #664BFE;
+    background-color: #7966e2;
     transform: scale(1.05);
 }
 
