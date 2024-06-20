@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load static %}
+    {% load filters %}
     <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,9 +14,9 @@
     <header>
         <h2>Notas</h2>
         <div class="bloque">
-            <a href="#">Claudia Galvez</a>
-            <a href="#">8vo Básico</a>
-            <a href="#">Colegio Padre Chaminade</a>
+            <a href="#">{{estudiante.first_name}} {{estudiante.last_name}}</a>
+            <a href="#">{{curso.nombre}}</a>
+            <a href="#">Estudiante</a>
         </div>
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>
@@ -58,44 +59,53 @@
 
     <content>
         <div class="card">
-            <h3>8vo Básico</h3>
-            <div class="asignaturas">
-                <a href="#">Lenguaje y Comunicación</a>
-                <a href="#">Inglés</a>
-                <a href="#">Matemáticas</a>
-                <a href="#">Ciencias Naturales</a>
-                <a href="#">Historia</a>
-                <a href="#">Educación Física</a>
-                <a href="#">Educación Artística</a>
-                <a href="#">Orientación</a>
-            </div>
-            <div class="notas">
-                <span>5,6</span>
-                <span>6,0</span>
-                <span>6,6</span>
-                <span>6,6</span>
-                <span>5,2</span>
-                <span>6,8</span>
-                <span>6,3</span> 
-                <span>MB</span>
-            </div>
-
+            <section>
+            <h3>{{curso.nombre}}</h3>
+            <span>Promedios</span>
+            </section>
+            <section>
+                <ul id="asignaturas">
+                    {% for a in asignaturas %}
+                    <li>
+                        {{a.nombre}}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <ul id="notas">
+                    {% for a in asignaturas %}
+                    {% if promedios %}
+                    {% for promedio in promedios|get_item:a.id %}
+                    <li>
+                        {{ promedio|default_if_none:'' }}
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </section>
         </div>
         <div class="card">
             <h3>Promedio General</h3>
-            <span class="promedio">6,2</span>
+            <span class="promedio">{{promedioGeneral}}</span>
         </div>
+        {% for a in asignaturas %}
         <div class="card">
-            <h3>Lenguaje y Comunicación</h3>
-            <span class="nombreRamo">Prueba 1</span>
-            <span class="nombreRamo">Prueba 2</span>
-            <span class="nombreRamo">Prueba 3</span>
-            <span class="nombreRamo">Examen Final</span>
-            <span class="notaRamo">5,7</span>
-            <span class="notaRamo">5,4</span>
-            <span class="notaRamo">6,3</span>
-            <span class="notaRamo">5,9</span>
+            <h3>{{a.nombre}}</h3>
+            <ul>
+                {% if notas|default_if_none:'' %}
+                {% for nota in notas|get_item:a.id %}
+                {% if nota is not none %}
+                <li>
+                    {{ nota }}
+                </li>
+                {% else %}
+                <h1>hola</h1>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </ul>
         </div>
+        {% endfor %}
     </content>
 </body>
 </html>

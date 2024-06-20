@@ -228,14 +228,7 @@ dialog::backdrop{
 }
 
 @media (max-width: 1500px){
-    content {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-            "curso periodo"
-            "asignatura registrar";
-        gap: 50px;
-        padding:80px 100px 80px 100px;
-    }
+    
     .card{
         grid-template-columns: 100px 1fr;
         padding: 10px;

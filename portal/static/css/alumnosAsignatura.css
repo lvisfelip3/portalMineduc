@@ -182,14 +182,49 @@ content details{
         color: #222a30;
         transition: all 130ms;
         gap: 10px;
-        display: inline-block;
-        justify-self: end;
     }
 
     #abrirPopup:hover{
         background-color: #222a30;
         color: #FDFBF6;
         transform: scale(1.05);
+    }
+
+    &:hover{
+        border: 1px solid #b5a9f8;
+    }
+    form {
+        
+        margin-right: 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+        input{
+            border: none;
+            transition: all 200ms ease-in-out;
+            font-size: 20px;
+            border-radius: 5px;
+            width: 60px;
+            height: 53px;
+            padding: 0;
+            transition: 200ms all;
+            text-align: center;
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+              }
+            &:focus{
+                border: 0;
+                outline: 0;
+                text-align: center;
+                &::placeholder{
+                    color: transparent;
+                }
+            }
+            &::placeholder{
+                text-align: center;
+            }
+        }
     }
 }
 

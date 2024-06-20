@@ -24,7 +24,7 @@ aside{
     grid-template-columns: 1fr;
     grid-template-rows: 30px 110px 1fr 1fr;
     background-color: #FDFBF6;
-    border: gray solid 0.2px;
+    border-right: 1px solid #ccc;
 }
 
 aside img {
@@ -75,7 +75,7 @@ aside .bloque:last-child{
 header{
     grid-area: header;
     display:grid;
-    grid-template-columns: 1fr 400px 120px;
+    grid-template-columns: 1fr 280px 120px;
     background-color: #FDFBF6;
     grid-template-areas: 
         "notas datos img";
@@ -112,24 +112,54 @@ header a{
     color: black;
     display: block;
     margin: 3px;
+    cursor: default;
+    transition: 150ms all;
 }
 
 header a:first-child{
     font-weight: bold;
 }
 
+header a:hover{
+    color: #593cff;
+}
+
 
 content{
     grid-area: content;
-    background:linear-gradient(90deg, rgba(105,97,255,1) 0%, rgba(232,203,255,1) 41%, rgba(255,210,210,1) 55%, rgba(255,82,82,1) 100%);
+    background: linear-gradient(90deg, rgba(103,97,242,1) 0%, rgba(241,81,81,1) 100%);
     display: grid;
-    grid-template-columns: 750px 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: 1fr;
+    grid-auto-rows: minmax(min-content,1fr);
     grid-template-areas: 
-        "notas promedio"
-        "notas asignatura";
-    gap: 30px;
-    padding: 70px 50px 70px 50px;
+        "notas notas promedio"
+        "notas notas promedio"
+        "asignatura . .";
+    gap: 50px;
+    padding:80px 110px;
+    overflow-y: auto;
+    max-height: 100dvh;
+    &::-webkit-scrollbar {
+        width: 13px;
+        background-color: rgba(241,81,81,1);
+        border-radius: 150px;
+      }
+    
+    &::-webkit-scrollbar-thumb{
+        border-radius: 150px;
+        background-color: #222a30;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover{
+        background-color: #593cff;
+    }
+
+    h3{
+        font-size: 30px;
+        display: inline;
+        margin: 0;
+    }
 }
 
 .card {
@@ -137,77 +167,109 @@ content{
     border-radius: 15px;
     transition: transform .1s;
     box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
-}
-
-.card:hover{
-    transform: scale(102%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    &:hover{
+        transform: scale(102%);
+    }
 }
 
 .card:first-child{
     grid-area: notas;
+    height: min-content;
+    width: 100%;
+    overflow-y: auto;
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+
+    section:first-child{
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr 100px;
+        grid-template-rows: 1fr;
+        h3{
+            font-size: 50px;
+            display: inline;
+            cursor: default;
+        }
+        span{
+            justify-self: center;
+            align-self: end;
+            font-size: 20px;
+            cursor: default;
+        }
+    }
+    section:last-child{
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr 100px;
+        grid-template-rows: 1fr;
+
+        #asignaturas{
+            font-size: 30px;
+            padding: 0;
+            margin: 12px 0 0 0;
+            li{
+                list-style-type: none;
+                padding: 5px;
+                border-bottom: 2px dashed #e0e0e0;
+                transition: 100ms all;
+                &:hover{
+                    color: #593cff;
+                    border-bottom: 2px dashed #593cff;
+                }
+            }
+        }
+        #notas{
+            justify-self: center;
+            font-size: 30px;
+            padding: 0;
+            font-weight: 600;
+            margin: 12px 0 0 0;
+            cursor: default;
+            li{
+                list-style-type: none;
+                border-bottom: 2px dashed transparent;
+                padding: 5px;
+            }
+        }
+    }
 }
 
-.card h3{
-    display: block;
-}
-.card .notas{
-    display:flex;
-    flex-direction: column;
-    max-width: 50%;
-    min-width: 49%;
-    align-items: flex-end;
-    justify-content: center;
-    font-size: 30px;
-}
-
-.card .asignaturas{
-    display:flex;
-    flex-direction: column;
-    max-width: 50%;
-    min-width: 49%;
-    justify-content: center;
-    font-size: 25px;
-}
 .card:nth-child(2){
-    grid-area: promedio
+    grid-area: promedio;
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px 1fr;
+    padding: 20px;
+
+    .promedio{
+        font-size: 140px;
+        justify-self: center;
+        align-self: center;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        transition: 150ms all;
+        cursor: default;
+    }
+    h3{
+        font-size: 35px;
+        justify-self: center;
+        cursor: default;
+    }
+    &:hover{
+        .promedio{
+            color: #5638ff;
+        }
+    }
 }
 
-.card:last-child{
-    grid-area: asignatura
-}
+
 
 @media (max-width: 1500px){
-    content {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-            "curso periodo"
-            "asignatura perfiles";
-        gap: 20px;
-        padding: 20px 40px 20px 40px;
-    }
-    .card{
-        grid-template-columns: 1fr 3fr;
-        grid-template-rows: 1fr 1fr;
-        padding: 10px;
-        align-items: start;
-    }
-    .card h3{
-        font-size: 30px;
-        margin: 0;
-    }
-
-    .card .fondo_logo{
-        height: 50px;
-        width: 50px;
-        justify-self: start;
-    }
-
-    .card svg {
-        margin-top: 9px;
-        width: 30px;
-        height: 30px;
-    }
 
     body {
         grid-template-columns: 300px 1fr;

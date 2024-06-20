@@ -14,21 +14,6 @@ def login(request):
 
 def index(request):
     return render(request,'index.html')
-
-#------------------------------
-#--------- PERFILES -----------
-#------------------------------
-
-def perfil(request):
-    return render(request,'perfil.html')
-
-def perfilDocente(request):
-    return render(request,'perfilDocente.html')
-
-def perfil_ri(request):
-    periodo = Periodo.objects.filter(predeterminado = True)
-    return render(request,'perfil_ri.html',{'periodo':periodo})
-
 #-----------------------------
 #--------- PERIODO -----------
 #-----------------------------
@@ -206,14 +191,16 @@ def alumnosNotas(request, id_curso, asgn_id):
     verAsignaturas = get_object_or_404(Asignatura, curso_id=id_curso, pk=asgn_id)
     estudiantes = User.objects.filter(curso_id=id_curso)
     promedios = calcularPromedios(estudiantes, verAsignaturas.id, id_curso, periodo.id)
-
+    notirijillas = obtenerNotas(estudiantes, verAsignaturas.id, id_curso, periodo.id)
     if request.method == 'GET':
         print("PROMEDIO:",promedios)
+        print("---NOTAS:",notirijillas)
         return render(request, 'alumnosAsignaturas.html', {
             'asignatura': verAsignaturas,
             'estudiante': estudiantes,
             'periodo': periodo,
-            'promedios': promedios 
+            'promedios': promedios,
+            'notas':notirijillas
         })
 
     try:
@@ -226,6 +213,7 @@ def alumnosNotas(request, id_curso, asgn_id):
             'estudiante': estudiantes,
             'periodo': periodo,
             'promedios': promedios,
+            'notas':notirijillas,
             'error': 'Ingrese un número válido'
         })
 
@@ -249,6 +237,7 @@ def alumnosNotas(request, id_curso, asgn_id):
             'estudiante': estudiantes,
             'periodo': periodo,
             'promedios': promedios,
+            'notas':notirijillas,
             'error': 'Todas las notas están completas'
         })
         
@@ -275,12 +264,35 @@ def calcularPromedios(estudiantes, asignatura_id, curso_id, periodo_id):
         if notas:
             promedio = round(sum(notas) / len(notas))
             promedios[estudiante.id] = promedio
-            savePromedio = Evaluacion.objects.get(usuario_id = estudiante.id)
-            savePromedio.promedio = promedio
-            savePromedio.save()
+            for evaluacion in evaluaciones:
+                evaluacion.promedio = promedio
+                evaluacion.save()
         else:
             promedios[estudiante.id] = None
     return promedios
+
+def obtenerNotas(estudiantes, asignatura_id, curso_id, periodo_id):
+    notasEst = {}
+    for estudiante in estudiantes:
+        evaluaciones = Evaluacion.objects.filter(
+            usuario_id=estudiante.id,
+            asignatura_id=asignatura_id,
+            curso_id=curso_id,
+            periodo_id=periodo_id
+        )
+        notas = []
+        for evaluacion in evaluaciones:
+            notas.extend([
+                evaluacion.nota1, evaluacion.nota2, evaluacion.nota3, evaluacion.nota4,
+                evaluacion.nota5, evaluacion.nota6, evaluacion.nota7, evaluacion.nota8,
+                evaluacion.nota9
+            ])
+        notas = [nota for nota in notas if nota is not None]
+        if notas:
+            notasEst[estudiante.id] = notas
+        else:
+            notasEst[estudiante.id] = None
+    return notasEst
 #--------------------------------------
 #--------- LOGIN Y REGISTRO -----------
 #--------------------------------------
@@ -385,21 +397,121 @@ def signin(request):
         estudiante = Group.objects.get(name="Estudiante").user_set.all()
         docente = Group.objects.get(name="Docente").user_set.all()
         ri = Group.objects.get(name="Responsable Institucional").user_set.all()
+        username2 = request.POST['username']
+        password2 = request.POST['password']
+        id_usuario = User.objects.get(username = username2)
         
         user = authenticate(
-            request, username=request.POST['username'], password=request.POST['password'])
+            request, username=username2, password=password2)
         if user is None:
             return render(request, 'signin.html', {"form": AuthenticationForm, "error": "El usuario o la contraseña son incorrectos."})
         else:
             if user in estudiante:  
                 auth_login(request, user)
-                return redirect('perfil')
+                return redirect('perfil', id_usuario.id)
             elif user in docente:  
                 auth_login(request, user)
-                return redirect('perfilDocente')
+                return redirect('perfilDocente', id_usuario.id)
             elif user in ri:  
                 auth_login(request, user)
-                return redirect('perfil_ri')
+                return redirect('perfil_ri', id_usuario.id)
             else:
                 return render(request, 'signin.html',{"error":"ha ocurrido un error"})
+            
+#------------------------------
+#--------- PERFILES -----------
+#------------------------------
+
+def mostrarNotas(estudiantes_id, asignaturas, curso_id, periodo_id):
+    notasEst = {}
+    for asignatura in asignaturas:
+        evaluaciones = Evaluacion.objects.filter(
+            usuario_id=estudiantes_id,
+            asignatura_id=asignatura.id,
+            curso_id=curso_id,
+            periodo_id=periodo_id
+        )
+        notas = []
+        for evaluacion in evaluaciones:
+            notas.extend([
+                evaluacion.nota1, evaluacion.nota2, evaluacion.nota3, evaluacion.nota4,
+                evaluacion.nota5, evaluacion.nota6, evaluacion.nota7, evaluacion.nota8,
+                evaluacion.nota9
+            ])
+        notas = [nota for nota in notas if nota is not None]
+        if notas:
+            notasEst[asignatura.id] = notas
+        else:
+            notasEst[asignatura.id] = None
+    return notasEst
+
+def mostrarPromedios(estudiantes_id, asignaturas, curso_id, periodo_id):
+    estProm = {}
+    for asignatura in asignaturas:
+        evaluaciones = Evaluacion.objects.filter(
+            usuario_id=estudiantes_id,
+            asignatura_id=asignatura.id,
+            curso_id=curso_id,
+            periodo_id=periodo_id
+        )
+        promedios = []
+        for evaluacion in evaluaciones:
+            promedios.extend([
+                evaluacion.promedio
+            ])
+        promedios = [promedio for promedio in promedios if promedio is not None]
+        if promedios:
+            estProm[asignatura.id] = promedios
+        else:
+            estProm[asignatura.id] = None
+    return estProm
+
+def promedioGeneral(estudiantes_id, asignaturas, curso_id, periodo_id):
+    total_promedios = []
+
+    for asignatura in asignaturas:
+        evaluaciones = Evaluacion.objects.filter(
+            usuario_id=estudiantes_id,
+            asignatura_id=asignatura.id,
+            curso_id=curso_id,
+            periodo_id=periodo_id
+        )
+        promedios = [evaluacion.promedio for evaluacion in evaluaciones if evaluacion.promedio is not None]
+        if promedios:
+            promedio_asignatura = round(sum(promedios) / len(promedios))
+            total_promedios.append(promedio_asignatura)
+        else:
+            pass
+
+    if total_promedios:
+        promedio_global = round(sum(total_promedios) / len(total_promedios))
+    else:
+        promedio_global = None
+    return promedio_global
+
+def perfil(request, id_estudiante):
+    periodo = Periodo.objects.get(predeterminado=True)
+    estudiante = User.objects.get(pk=id_estudiante)
+    curso = Curso.objects.get(pk = estudiante.curso_id)
+    asignaturas = Asignatura.objects.filter(curso_id = curso.id)
+    notas = mostrarNotas(estudiante.id, asignaturas, curso.id, periodo.id)
+    promedio = mostrarPromedios(estudiante.id, asignaturas, curso.id, periodo.id)
+    promedio_global = promedioGeneral(estudiante.id, asignaturas, curso.id, periodo.id)
+    promedio_globalConComilla = str(promedio_global)[:1] + "," + str(promedio_global)[1:2]
+    return render(request,
+                  'perfil.html',
+                  {'estudiante':estudiante,
+                    'curso':curso, 
+                    'asignaturas': asignaturas,
+                    'notas': notas,
+                    'promedios':promedio,
+                    'promedioGeneral':promedio_globalConComilla
+                    })
+
+def perfilDocente(request):
+    return render(request,'perfilDocente.html')
+
+def perfil_ri(request):
+    periodo = Periodo.objects.filter(predeterminado = True)
+    return render(request,'perfil_ri.html',{'periodo':periodo})
     
