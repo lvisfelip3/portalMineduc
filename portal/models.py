@@ -43,15 +43,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
     
-
-class Dia(models.Model):
-    nombre = models.CharField(max_length=10)
-
-    def __str__(self):
-        return self.nombre
-    
-
-
 class Asignatura(models.Model):
     nombre = models.CharField(max_length=40)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, default='')

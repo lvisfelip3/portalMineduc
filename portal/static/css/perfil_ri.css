@@ -184,6 +184,7 @@ content{
     margin-left: 30px;
     font-size: 52px;
     font-weight: 600;
+    cursor: default;
 }
 
 .card:hover{
@@ -212,6 +213,7 @@ content{
     opacity: 0.7;
     font-size: 27px;
     margin: 0 0 0 30px;
+    cursor: default;
 }
 
 dialog{
@@ -228,7 +230,11 @@ dialog::backdrop{
 }
 
 @media (max-width: 1500px){
-    
+    content{
+        gap: 40px;
+        padding:50px 80px;
+    }
+
     .card{
         grid-template-columns: 100px 1fr;
         padding: 10px;
