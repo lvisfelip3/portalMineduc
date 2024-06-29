@@ -77,10 +77,13 @@
 
         <div class="card">
             <span class="fondo_logo">
-                <svg width="65" height="65" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000"><g stroke="white" stroke-width="1.5"><path d="M4 8c0-2.828 0-4.243.879-5.121C5.757 2 7.172 2 10 2h4c2.828 0 4.243 0 5.121.879C20 3.757 20 5.172 20 8v8c0 2.828 0 4.243-.879 5.121C18.243 22 16.828 22 14 22h-4c-2.828 0-4.243 0-5.121-.879C4 20.243 4 18.828 4 16V8Z"/><path d="M19.898 16h-12c-.93 0-1.395 0-1.777.102A3 3 0 0 0 4 18.224"/><path d="M8 7h8M8 10.5h5M19.5 19H8" stroke-linecap="round"/></g></svg>
+                <svg width="65" height="65" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" fill-rule="evenodd" d="M6.9 0h.2A2.9 2.9 0 0 1 10 2.9v1.2A2.9 2.9 0 0 1 7.1 7h-.2A2.9 2.9 0 0 1 4 4.1V2.9A2.9 2.9 0 0 1 6.9 0zm7.91 4.58-4.15 5.82c.226.503.341 1.049.34 1.6v4.67A1.336 1.336 0 0 1 9.67 18l-5.34-.01A1.327 1.327 0 0 1 3 16.67V12a4.012 4.012 0 0 1 4-4 3.9 3.9 0 0 1 2.36.79l3.83-5.37a1 1 0 0 1 1.62 1.16z"/></svg>
             </span>
-            <h3>Asignatura</h3>
-            <p>Registra, visualiza o elimina las asignaturas pertenecientes a la intitución</p>
+            <h3>Asistencia</h3>
+            {%for p in periodo%}
+            <a href="{% url 'listaCursos' p.id%}"></a>
+            {%endfor%}
+            <p>Registra la asistencia diaria del Curso</p>
         </div>
 
         <div class="card" id="abrirPopup">

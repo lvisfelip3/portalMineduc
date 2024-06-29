@@ -54,7 +54,6 @@ class Clase(models.Model):
     nombre = models.CharField(max_length=30)
     hora_inicio = models.TimeField(blank=False)
     hora_termino = models.TimeField(blank=False)
-    asistencia = models.BooleanField(default=False)
     periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
@@ -82,3 +81,12 @@ class Evaluacion(models.Model):
     def __str__(self):
         return str(self.id)
 
+class Asistencia(models.Model):
+    fecha = models.DateField()
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE)
+    asistio = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.curso.nombre} - {self.fecha}"

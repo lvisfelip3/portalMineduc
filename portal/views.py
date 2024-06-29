@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group
-from .models import User, Curso, Periodo, Asignatura, Evaluacion
+from .models import User, Curso, Periodo, Asignatura, Evaluacion, Asistencia
 from .forms import crearCurso, crearPeriodo, crearAsignatura, estudianteCreation, docenteCreation, RICreation
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.db import IntegrityError
-from django.http import HttpResponse
 from datetime import datetime
+import locale
+
+locale.setlocale(locale.LC_ALL,'es_ES.UTF-8')
 
 
 def login(request):
@@ -136,7 +138,6 @@ def eliminarAlumnoCurso(request,curso_idd,usuario_id):
         obtenerUsuario.save()
         return redirect('listaEst',curso_idd)
     else:
-        print("algo salio mal")
         return redirect('listaEst', curso_idd)
     
 #--------------------------------
@@ -193,8 +194,6 @@ def alumnosNotas(request, id_curso, asgn_id):
     promedios = calcularPromedios(estudiantes, verAsignaturas.id, id_curso, periodo.id)
     notirijillas = obtenerNotas(estudiantes, verAsignaturas.id, id_curso, periodo.id)
     if request.method == 'GET':
-        print("PROMEDIO:",promedios)
-        print("---NOTAS:",notirijillas)
         return render(request, 'alumnosAsignaturas.html', {
             'asignatura': verAsignaturas,
             'estudiante': estudiantes,
@@ -417,6 +416,54 @@ def signin(request):
                 return redirect('perfil_ri', id_usuario.id)
             else:
                 return render(request, 'signin.html',{"error":"ha ocurrido un error"})
+
+#--------------------------------
+#--------- ASISTENCIA -----------
+#--------------------------------
+def listaCurso(request, id_periodo):
+    curso = Curso.objects.filter(periodo_id = id_periodo)
+    return render(request,'asistenciaselectCurso.html',{'cursos':curso})
+
+def asistenciasCurso(request, id_periodo,id_curso):
+    fecha = Asistencia.objects.filter(curso_id = id_curso).values('fecha').distinct()
+    if fecha.exists():
+        fecha2 = datetime.strftime(fecha[0]['fecha'],'%d %B, %Y')
+    else:
+        fecha2 = None
+    curso = Curso.objects.get(id = id_curso)
+    return render(request,'asistenciasCurso.html',{'fechas':fecha2,'fechass':fecha,'curso':curso,'periodo':id_periodo})
+
+def eliminarAsistencia(request, fecha_asistencia):
+    periodo = Periodo.objects.get(predeterminado=True)
+    fecha5 = datetime.strptime(fecha_asistencia, '%d %B, %Y').date()
+    fecha = Asistencia.objects.filter(fecha = fecha5)
+    fechaAborrar = Asistencia.objects.filter(fecha = fecha5).values('curso_id')
+    id_curso = fechaAborrar[0]['curso_id']
+    fecha.delete()
+    return redirect('asistenciasCurso',periodo.id,id_curso)
+
+def registrarAsistencia(request, id_periodo,id_curso):
+    estudiantes = User.objects.filter(curso_id = id_curso ,groups__name='Estudiante')
+    curso = Curso.objects.get(pk=id_curso)
+    if request.method == 'GET':
+        if Asistencia.objects.filter(fecha = datetime.now().date(),curso_id = id_curso).exists():
+            print("error")
+            return redirect('asistenciasCurso',id_periodo,id_curso)
+        else:
+            fecha = datetime.strftime(datetime.now(),'%d %B, %Y')
+            return render(request, 'registrarAsistencia.html', {'estudiantes': estudiantes, 'fecha':fecha, 'curso':curso})
+    else:
+        for estudiante in estudiantes:
+            asistio = request.POST.get(f'asistio_{estudiante.id}', 'off') == 'on'
+            Asistencia.objects.create(
+                fecha=datetime.now().date(),
+                usuario_id=estudiante.id,
+                curso_id = id_curso,
+                periodo_id = id_periodo,
+                asistio=asistio
+        )
+        return redirect('asistenciasCurso',id_periodo,id_curso)
+
             
 #------------------------------
 #--------- PERFILES -----------

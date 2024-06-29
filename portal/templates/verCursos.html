@@ -77,7 +77,7 @@
                             <td><a href="{% url 'listaEst' c.id %}" id="materia">{{c.nombre}}</a></td>
                             <td>{{c.seccion}}</td>
                             <td><a href="{% url 'editarCursos' c.id c.periodo_id %}"class="opcion">Editar</a>
-                                <a href="{% url 'asignatura' c.id%}"class="opcion">Asignaturas</a>   
+                                <a href="{% url 'asignatura' c.id%}"class="opcion">Asignaturas</a>
                                 <a href="{% url 'eliminarCursos' c.id c.periodo_id%}"class="opcion">Eliminar</a> 
                             </td>
                         </tr>

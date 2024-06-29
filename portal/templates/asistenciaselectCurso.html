@@ -1,0 +1,30 @@
+{% extends 'verCUrsos.html' %}
+{%block links%}
+<h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href=""></a>Cursos</h2>
+{%endblock%}
+
+{% block content %}
+<content>
+    <div class="card" style="margin-top: 50px;">
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Sección</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in cursos %}
+                    <tr>
+                        <td><a href="{% url 'asistenciasCurso' c.periodo_id  c.id %}" id="materia">{{c.nombre}}</a></td>
+                        <td>{{c.seccion}}</td>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</content>
+{% endblock %}

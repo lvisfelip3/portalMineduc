@@ -201,6 +201,10 @@ content{
 .card svg {
     margin-top: 14px;
 }
+
+.card:nth-child(3) svg{
+    margin-left: 10px;
+}
 .card a {
     position: absolute;
     height: 100%;
