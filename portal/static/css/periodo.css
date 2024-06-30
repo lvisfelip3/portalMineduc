@@ -191,8 +191,9 @@ table tbody tr{
 table th{
     text-align: left;
     font-size: 30px;
-    background-color: #d6d6d6;
+    background-color: #7d6fce;
     border-radius: 3px;
+    color: white;
 }
 
 table li::marker{
@@ -244,6 +245,13 @@ table td{
         background-color: #9c0141;
         color: white;
         transform: scale(1.03);
+    }
+}
+
+.card #eliminarPeriodo{
+    background-color: #fd1a1a;
+    &:hover{
+        background-color: #9c0141;
     }
 }
 

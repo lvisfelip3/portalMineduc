@@ -352,6 +352,14 @@ dialog button:hover{
     transform: scale(1.05);
 }
 
+#fechascss{
+    text-decoration: none;
+    color: #1d1d1d;
+    &:hover{
+        color:#593cff
+    }
+}
+
 .botonera{
     display: flex;
     gap: 10px;

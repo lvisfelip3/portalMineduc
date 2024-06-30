@@ -1,6 +1,6 @@
 {% extends 'signupEstudiante.html' %}
 
-{% block links %}<h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2> > </h2> <h2 class="headerlink"><a href="{% url 'signupRI' %}"></a>Registrar Responsable Institucional</h2>{% endblock %}
+{% block links %}<h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2> > </h2> <h2 class="headerlink"><a href="{% url 'signupRI' id %}"></a>Registrar Responsable Institucional</h2>{% endblock %}
 
 {% block content %}
 <h1>soy RI</h1>

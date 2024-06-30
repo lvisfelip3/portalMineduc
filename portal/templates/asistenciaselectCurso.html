@@ -1,6 +1,6 @@
 {% extends 'verCUrsos.html' %}
 {%block links%}
-<h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href=""></a>Cursos</h2>
+<h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href=""></a>Cursos</h2>
 {%endblock%}
 
 {% block content %}
@@ -17,7 +17,7 @@
                 <tbody>
                     {% for c in cursos %}
                     <tr>
-                        <td><a href="{% url 'asistenciasCurso' c.periodo_id  c.id %}" id="materia">{{c.nombre}}</a></td>
+                        <td><a href="{% url 'asistenciasCurso' id c.periodo_id  c.id %}" id="materia">{{c.nombre}}</a></td>
                         <td>{{c.seccion}}</td>
                         </td>
                     </tr>
