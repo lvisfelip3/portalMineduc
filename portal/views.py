@@ -7,6 +7,7 @@ from django.contrib.auth import login as auth_login, logout, authenticate
 from django.db import IntegrityError
 from datetime import datetime
 import locale
+import json
 
 locale.setlocale(locale.LC_ALL,'es_ES.UTF-8')
 
@@ -425,22 +426,50 @@ def listaCurso(request, id_periodo):
     return render(request,'asistenciaselectCurso.html',{'cursos':curso})
 
 def asistenciasCurso(request, id_periodo,id_curso):
-    fecha = Asistencia.objects.filter(curso_id = id_curso).values('fecha').distinct()
-    if fecha.exists():
-        fecha2 = datetime.strftime(fecha[0]['fecha'],'%d %B, %Y')
+    fechas = Asistencia.objects.filter(curso_id = id_curso).values_list('fecha',flat=True).distinct()
+    if fechas.exists():
+        fechaUltimate = []
+        for fecha in fechas:
+            fecha2 = datetime.strftime(fecha,'%d %B, %Y')
+            fechaUltimate.append(fecha2)
     else:
         fecha2 = None
     curso = Curso.objects.get(id = id_curso)
-    return render(request,'asistenciasCurso.html',{'fechas':fecha2,'fechass':fecha,'curso':curso,'periodo':id_periodo})
+    return render(request,'asistenciasCurso.html',{'fechas':fechaUltimate,
+                                                   'curso':curso,
+                                                   'periodo':id_periodo})
 
 def eliminarAsistencia(request, fecha_asistencia):
     periodo = Periodo.objects.get(predeterminado=True)
     fecha5 = datetime.strptime(fecha_asistencia, '%d %B, %Y').date()
-    fecha = Asistencia.objects.filter(fecha = fecha5)
+    fecha = Asistencia.objects.filter(fecha = fecha5, periodo_id = periodo.id)
     fechaAborrar = Asistencia.objects.filter(fecha = fecha5).values('curso_id')
     id_curso = fechaAborrar[0]['curso_id']
     fecha.delete()
     return redirect('asistenciasCurso',periodo.id,id_curso)
+
+def listaAsistencia(request, id_curso, fecha_asistencia):
+    curso = Curso.objects.get(pk = id_curso)
+    periodo = Periodo.objects.get(predeterminado=True)
+    fecha5 = datetime.strptime(fecha_asistencia, '%d %B, %Y').date()
+    asistencia_existente = Asistencia.objects.filter(fecha = fecha5, curso_id = id_curso)
+    getEstudiantes = Asistencia.objects.filter(fecha = fecha5, curso_id = id_curso).values_list('usuario_id',flat=True)
+    est = User.objects.filter(id__in = getEstudiantes)
+    
+    if request.method == 'POST':
+        for asistencia in asistencia_existente:
+            asistio = request.POST.get(f'asistio_{asistencia.usuario.id}', 'off') == 'on'
+            asistencia.asistio = asistio
+            asistencia.save()
+
+        return redirect('asistenciasCurso', periodo.id, curso.id ) 
+    
+    return render(request, 'listaAsistencia.html', {'estudiantes':est,
+                                                     'periodo':periodo, 
+                                                     'fechaMostrable': fecha_asistencia,
+                                                     'curso':curso,
+                                                     'asistencia_existente':asistencia_existente,
+                                                     'periodo': periodo})
 
 def registrarAsistencia(request, id_periodo,id_curso):
     estudiantes = User.objects.filter(curso_id = id_curso ,groups__name='Estudiante')
@@ -451,12 +480,14 @@ def registrarAsistencia(request, id_periodo,id_curso):
             return redirect('asistenciasCurso',id_periodo,id_curso)
         else:
             fecha = datetime.strftime(datetime.now(),'%d %B, %Y')
-            return render(request, 'registrarAsistencia.html', {'estudiantes': estudiantes, 'fecha':fecha, 'curso':curso})
+            return render(request, 'registrarAsistencia.html', {'estudiantes': estudiantes, 'fecha':fecha, 'curso':curso, 'periodo':id_periodo})
     else:
         for estudiante in estudiantes:
             asistio = request.POST.get(f'asistio_{estudiante.id}', 'off') == 'on'
+            #fecha_custom = '11-05-2024'
             Asistencia.objects.create(
                 fecha=datetime.now().date(),
+                #fecha = datetime.strptime(fecha_custom,'%d-%m-%Y').date(),
                 usuario_id=estudiante.id,
                 curso_id = id_curso,
                 periodo_id = id_periodo,
@@ -554,6 +585,28 @@ def perfil(request, id_estudiante):
                     'promedios':promedio,
                     'promedioGeneral':promedio_globalConComilla
                     })
+
+def asistencia(request, id_estudiante):
+    estudiante = User.objects.get(pk = id_estudiante)
+    curso = Curso.objects.get(pk = estudiante.curso_id)
+    getAsistencias = Asistencia.objects.filter(usuario_id = estudiante.id).values_list('fecha',flat=True).distinct()
+    getAsistenciasAsistidas = Asistencia.objects.filter(usuario_id = estudiante.id, asistio = 1).values_list('fecha',flat=True).distinct()
+    if getAsistencias.exists():
+        asistencias = getAsistencias.count()
+        asistio = getAsistenciasAsistidas.count()
+        porcentajeAsistencia = round((100 * asistio) / asistencias, 1)
+        inasistencias = asistencias - asistio
+    else:
+        asistencias = 0
+        asistio = 0
+        porcentajeAsistencia = 0
+        inasistencias = 0
+    return render(request, 'asistencia.html',{'estudiante':estudiante,
+                                              'curso':curso,
+                                              'asistencias':asistencias,
+                                              'asistio':asistio,
+                                              'porcentaje':porcentajeAsistencia,
+                                              'inasistencias':inasistencias})
 
 def perfilDocente(request):
     return render(request,'perfilDocente.html')

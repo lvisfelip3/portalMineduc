@@ -48,14 +48,17 @@ aside a{
 }
 
 .lista {
-    display: block;
-    margin: 15px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 40px 0;
     padding: 5px;
+    gap: 15px;
     transition: transform 150ms;
 }
 
-.lista svg{
-    padding-top: 4px;
+.lista .icon{
+    height: 1cap;
 }
 
 .lista:hover{
@@ -233,12 +236,23 @@ table td{
 }
 
 .card td .opcion:last-child{
-    background-color: #cf3072;
-    color: #FDFBF6;
+    background-color: #fd1a1a;
+    color: white;
     transition: all 150ms;
     margin-left: 5px;
     &:hover{
-        background-color: #f30d6d;
+        background-color: #9c0141;
+        color: white;
+        transform: scale(1.03);
+    }
+}
+
+.card td .opcion:nth-child(2){
+    background-color: #09f;
+    color: white;
+    width:105px;
+    &:hover{
+        background-color: rgb(1, 100, 167);
         transform: scale(1.03);
     }
 }

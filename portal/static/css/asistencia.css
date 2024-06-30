@@ -3,7 +3,6 @@
     min-width: 0;
 }
 
-
 body {
     display: grid;
     min-height: 100vh;
@@ -25,7 +24,7 @@ aside{
     grid-template-columns: 1fr;
     grid-template-rows: 30px 110px 1fr 1fr;
     background-color: #FDFBF6;
-    box-shadow: 0 3px 2px 1px hsla(0, 0%, 0%, 0.2);
+    border-right: 1px solid #ccc;
 }
 
 aside img {
@@ -93,35 +92,11 @@ header img{
     object-fit: contain;
 }
 
-.links{
-    grid-area: notas;
-}
-
 header h2{
+    grid-area: notas;
     margin: 0;
-    font-size: 33px;
-    display:inline;
-    transition: all 200ms;
-    position: relative;
-}
-
-header h2 a{
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    display: inline;
-    cursor: default;
-}
-
-
-header .headerlink:first-child{
-    margin-left: 10px;
-}
-
-header .headerlink:hover{
-    color: #593cff;
-    transform: scale(1.1);
-    cursor: default;
+    margin-left: 30px;
+    font-size: 40px
 }
 
 header .bloque{
@@ -135,147 +110,143 @@ header .bloque{
     flex-direction: column;
     align-items: end;
 }
-
 header a{
     text-decoration: none;
     color: black;
     display: block;
     margin: 3px;
+    cursor: default;
+    transition: 150ms all;
 }
 
 header a:first-child{
     font-weight: bold;
 }
 
+header a:hover{
+    color: #593cff;
+}
+
 
 content{
     grid-area: content;
-    background: linear-gradient(to right, #cfd5d8, #768a9c);
-    padding: 80px 100px;
-}
-
-.card {
-    background-color: #FDFBF6;
-    border-radius: 8px;
-    padding: 20px 24px;
-    max-height: 650px;
-    overflow: auto;
+    background: linear-gradient(90deg, rgba(103,97,242,1) 0%, rgba(241,81,81,1) 100%);
     display: grid;
-    grid-template: min-content / 1fr;
-}
-
-content details{
-    font-size: 40px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    transition: 200ms all;
-    cursor: default;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-auto-rows: min-content;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(2,1fr);
+    grid-template-areas: 
+        "total total total"
+        "asistencia clases inasistencias";
+    gap: 50px;
+    padding:80px 110px;
+    overflow-y: auto;
+    max-height: 100dvh;
+    &::-webkit-scrollbar {
+        width: 13px;
+        background-color: rgba(241,81,81,1);
+        border-radius: 150px;
+      }
     
-    #abrirPopup{
-        background-color: #FDFBF6;
-        font-size: 27px;
-        padding:10px 20px 10px 20px;
-        border-radius: 5px;
-        border: 0;
-        outline: none;
-        color: #222a30;
-        transition: all 130ms;
-        gap: 10px;
-    }
-
-    #abrirPopup:hover{
+    &::-webkit-scrollbar-thumb{
+        border-radius: 150px;
         background-color: #222a30;
-        color: #FDFBF6;
-        transform: scale(1.05);
+    }
+    
+    &::-webkit-scrollbar-thumb:hover{
+        background-color: #593cff;
     }
 
-    &:hover{
-        border: 1px solid #b5a9f8;
-    }
-    form {
-        
-        margin-right: 20px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 20px;
-        input{
-            border: none;
-            transition: all 200ms ease-in-out;
-            font-size: 20px;
-            border-radius: 5px;
-            width: 60px;
-            height: 53px;
-            padding: 0;
-            transition: 200ms all;
-            text-align: center;
-            &::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-              }
-            &:focus{
-                border: 0;
-                outline: 0;
-                text-align: center;
-                &::placeholder{
-                    color: transparent;
-                }
-            }
-            &::placeholder{
-                text-align: center;
-            }
-        }
-    }
-}
-
-content summary{
-    padding: 24px;
-
-    &::marker{
-        font-size: 20px;
-    }
-
-    p{
-        direction: rtl;
+    h3{
+        font-size: 30px;
+        display: inline;
         margin: 0;
     }
 }
 
-content details[open]{
-    background-color: #7966e2;
-    color: #FDFBF6;
-    padding: 0 0 24px 24px;
-}
-
-content details:last-child{
-    margin-bottom: 0;
-}
-
-#popup {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-}
-
-.card::-webkit-scrollbar {
-    width: 9px;
+.card {
     background-color: #FDFBF6;
-    border-radius: 0 150px 150px 0;
-  }
-
-.card::-webkit-scrollbar-thumb{
-    border-radius: 150px;
-    background-color: #222a30;
+    border-radius: 15px;
+    transition: transform .1s;
+    box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr;
+    justify-items: center;
+    align-items: center;
+    padding: 20px;
+    h2{
+        font-size: 35px;
+        margin: 0;
+        cursor: default;
+    }
+    span{
+        font-size: 100px;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        cursor: default;
+    }
+    &:hover{
+        transform: scale(102%);
+        span{
+            color:#5638ff;
+        }
+    }
 }
 
-.card::-webkit-scrollbar-thumb:hover{
-    background-color: #593cff;
+.card:first-child{
+    grid-area: total;
 }
+
+.card:nth-child(2){
+    grid-area: asistencia;
+}
+
+.card:nth-child(3){
+    grid-area: clases;
+}
+
+.card:last-child{
+    grid-area: inasistencias;
+}
+
+
 
 @media (max-width: 1500px){
+
+    content{
+        gap: 20px;
+        padding:50px 80px;
+    }
+
+    .card:first-child{
+        padding: 25px;
+    
+        section:first-child{
+            h3{
+                font-size: 40px;
+            }
+            span{
+                font-size: 20px;
+            }
+        }
+        section:last-child{
+            #asignaturas{
+                font-size: 25px;
+            }
+            #notas{
+                font-size: 25px;
+            }
+        }
+    }
+    
+    .card:nth-child(2){
+        .promedio{
+            font-size: 110px;
+        }
+        h3{
+            font-size: 25px;
+        }
+    }
+    
 
     body {
         grid-template-columns: 300px 1fr;
@@ -317,8 +288,8 @@ content details:last-child{
     }
     
     header h2{
-        margin-left: 5px;
-        font-size: 20px
+        margin-left: 25px;
+        font-size: 25px
     }
     
     header .bloque{

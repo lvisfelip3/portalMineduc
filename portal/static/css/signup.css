@@ -48,14 +48,17 @@ aside a{
 }
 
 .lista {
-    display: block;
-    margin: 15px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 40px 0;
     padding: 5px;
+    gap: 15px;
     transition: transform 150ms;
 }
 
-.lista svg{
-    padding-top: 4px;
+.lista .icon{
+    height: 1cap;
 }
 
 .lista:hover{

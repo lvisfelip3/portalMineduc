@@ -1,24 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     {% load static %}
     {% load filters %}
-    <link rel="stylesheet" href="{% static 'css/alumnosAsignatura.css' %}">
+    <link rel="stylesheet" href="{% static 'css/asistencia.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Mineduc - Docente</title>
+    <title>perfil</title>
     
     
 </head>
 <body>
     <header>
-        <div class="links">
-        <h2 class="headerlink"><a href="{% url 'perfil_ri' %}"></a>Académico</h2><h2> > </h2><h2 class="headerlink"><a href="{% url 'cursos' periodo.id%}"></a>Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href="{% url 'asignatura' asignatura.curso_id%}"></a>Asignaturas</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>{{asignatura.nombre}}</h2>
-        </div>
+        {% block links %}
+        <h2>Asistencia</h2>
+        {% endblock %}
         <div class="bloque">
-            <a href="#">Claudia Galvez</a>
-            <a href="#">8vo Básico</a>
-            <a href="#">Colegio Padre Chaminade</a>
+            <a href="#">{{estudiante.first_name}} {{estudiante.last_name}}</a>
+            <a href="#">{{curso.nombre}}</a>
+            <a href="#">Estudiante</a>
         </div>
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>
@@ -85,43 +85,26 @@
             {% endif %}
         </div>
     </aside>
-
+    
+    {% block content %}
     <content>
         <div class="card">
-            {{error}}
-            {{notas.first}}
-            {% for e in estudiante %}
-                    <details name="desplegable">
-                        <summary>{{e.first_name}} {{e.last_name}}
-                            {% if promedios is not none %}
-                            <p>Promedio:
-                                {% with promedio=promedios|get_item:e.id %}
-                                    {% if promedio is not none %}
-                                        <strong>{{ promedio }}</strong>
-                                    {% else %}
-                                    {% endif %}
-                                {% endwith %}
-                            </p>
-                            {% else %}
-                            {% endif %}
-                        </summary>
-                        <form method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="id" value={{e.id}}>
-                            <input type="number" name="nota" required placeholder="Nota">
-                            <button id="abrirPopup" type="submit">Subir</button>
-                        </form>
-                        <section>
-                            {% if notas|default_if_none:'' %}
-                                {% for nota in notas|get_item:e.id %}
-                                    <span>{{ nota|default_if_none:'' }}</span>
-                                {% endfor %}
-                            {% else %}
-                            {% endif %}
-                        </section>
-                    </details>
-            {% endfor %}
+            <h2>Porcentaje de Asistencia Actual</h2>
+            <span>{{porcentaje}}%</span>
+        </div>
+        <div class="card">
+            <h2>Asistencia</h2>
+            <span>{{asistio}}</span>
+        </div>
+        <div class="card">
+            <h2>Clases Registradas</h2>
+            <span>{{asistencias}}</span>
+        </div>
+        <div class="card">
+            <h2>Inasistencias</h2>
+            <span>{{inasistencias}}</span>
         </div>
     </content>
+    {% endblock %}
 </body>
 </html>

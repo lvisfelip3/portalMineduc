@@ -19,10 +19,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for fecha in fechass %}
+                    {% for fecha in fechas %}
                     <tr>
-                        <td>{{fechas}}</td>
-                        <td><a href="{% url 'eliminarAsistencia' fechas %}"class="opcion">Eliminar</a></td>
+                        <td><a href="{% url 'listaAsistencia' curso.id fecha %}">{{fecha}}</a></td>
+                        <td><a href="{% url 'eliminarAsistencia' fecha %}"class="opcion">Eliminar</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
