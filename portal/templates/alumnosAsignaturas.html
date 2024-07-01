@@ -16,9 +16,9 @@
         <h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2><h2> > </h2><h2 class="headerlink"><a href="{% url 'cursos' id periodo.id%}"></a>Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href="{% url 'asignatura' id asignatura.curso_id%}"></a>Asignaturas</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>{{asignatura.nombre}}</h2>
         </div>
         <div class="bloque">
-            <a href="#">Claudia Galvez</a>
-            <a href="#">8vo Básico</a>
-            <a href="#">Colegio Padre Chaminade</a>
+            <a href="#">{{perfil.first_name}} {{perfil.last_name}}</a>
+            <a href="#">{{perfil.username}}</a>
+            <a href="#">{{gruop.name}}</a>
         </div>
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>
@@ -72,7 +72,7 @@
             {{notas.first}}
             {% for e in estudiante %}
                     <details name="desplegable">
-                        <summary>{{e.first_name}} {{e.last_name}}
+                        <summary style="text-transform: capitalize;">{{e.first_name}} {{e.last_name}}
                             {% if promedios is not none %}
                             <p>Promedio:
                                 {% with promedio=promedios|get_item:e.id %}

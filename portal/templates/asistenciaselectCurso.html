@@ -17,7 +17,7 @@
                 <tbody>
                     {% for c in cursos %}
                     <tr>
-                        <td><a href="{% url 'asistenciasCurso' id c.periodo_id  c.id %}" id="materia">{{c.nombre}}</a></td>
+                        <td><a href="{% url 'asistenciasCurso' id c.periodo_id  c.id %}" id="materia" style="text-transform: capitalize;">{{c.nombre}}</a></td>
                         <td>{{c.seccion}}</td>
                         </td>
                     </tr>

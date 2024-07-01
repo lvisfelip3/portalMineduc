@@ -15,9 +15,9 @@
         {%block links%}<h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href=""></a>Cursos</h2>{%endblock%}
         </div>
         <div class="bloque">
-            <a href="#">Claudia Galvez</a>
-            <a href="#">8vo Básico</a>
-            <a href="#">Colegio Padre Chaminade</a>
+            <a href="#">{{perfil.first_name}} {{perfil.last_name}}</a>
+            <a href="#">{{perfil.username}}</a>
+            <a href="#">{{gruop.name}}</a>
         </div>
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>
@@ -82,7 +82,7 @@
                     <tbody>
                         {% for c in cursos %}
                         <tr>
-                            <td><a href="{% url 'listaEst' id c.id %}" id="materia">{{c.nombre}}</a></td>
+                            <td><a href="{% url 'listaEst' id c.id %}" id="materia" style="text-transform: capitalize;">{{c.nombre}}</a></td>
                             <td>{{c.seccion}}</td>
                             <td><a href="{% url 'editarCursos' id c.id c.periodo_id %}"class="opcion">Editar</a>
                                 <a href="{% url 'asignatura' id c.id%}"class="opcion">Asignaturas</a>

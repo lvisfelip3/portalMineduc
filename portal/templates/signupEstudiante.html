@@ -13,9 +13,9 @@
             {% block links %}<h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2> > </h2> <h2 class="headerlink"><a href="{% url 'signupEstudiante' id %}"></a>Registrar Estudiante</h2>{% endblock %}
         </div>
         <div class="bloque">
-            <a href="#">Claudia Galvez</a>
-            <a href="#">8vo Básico</a>
-            <a href="#">Colegio Padre Chaminade</a>
+            <a href="#">{{perfil.first_name}} {{perfil.last_name}}</a>
+            <a href="#">{{perfil.username}}</a>
+            <a href="#">{{gruop.name}}</a>
         </div>
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>

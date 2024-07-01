@@ -7,7 +7,6 @@ from django.contrib.auth import login as auth_login, logout, authenticate
 from django.db import IntegrityError
 from datetime import datetime
 import locale
-import json
 
 locale.setlocale(locale.LC_ALL,'es_ES.UTF-8')
 
@@ -22,12 +21,16 @@ def index(request):
 #-----------------------------
 
 def periodo(request, id_user):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     form = crearPeriodo()
     periodo = Periodo.objects.all()
     if request.method == 'GET':
         return render(request, 'periodo.html',{'form':form, 
                                                'periodo':periodo,
-                                               'id':id_user})
+                                               'id':id_user,
+                                               'perfil':perfil,
+                                               'gruop':gruop})
     else:
         try:
             form = crearPeriodo(data = request.POST)
@@ -52,22 +55,30 @@ def periodo(request, id_user):
                                   {'form':form, 
                                    'periodo':periodo,
                                    'error':'Solo un Periodo puede ser predeterminado2',
-                                   'id':id_user})
+                                   'id':id_user,
+                                   'perfil':perfil,
+                                   'gruop':gruop})
         except IntegrityError:
             return render(request, 
                           'periodo.html',
                           {'form':form, 
                            'periodo':periodo,
                            'error':'Solo un Periodo puede ser predeterminado3',
-                           'id':id_user})
+                           'id':id_user,
+                           'perfil':perfil,
+                           'gruop':gruop})
     
 def editarPeriodo(request,id_user, periodo_id):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     if request.method == 'GET':
         periodo = get_object_or_404(Periodo, pk=periodo_id)
         form = crearPeriodo(instance=periodo)
         return render(request, 'editarPeriodo.html', {'periodo':periodo, 
                                                       'form': form,
-                                                      'id':id_user})
+                                                      'id':id_user,
+                                                      'perfil':perfil,
+                                                      'gruop':gruop})
     else:
         try:
             predOn = request.POST.get('predeterminado', 'True')
@@ -88,7 +99,9 @@ def editarPeriodo(request,id_user, periodo_id):
             return render(request, 'editarPeriodo.html', {'periodo':periodo, 
                                                           'form': form, 
                                                           'error':'Ha ocurrido un error con los parametros ingresados',
-                                                          'id':id_user})
+                                                          'id':id_user,
+                                                          'perfil':perfil,
+                                                          'gruop':gruop})
 
 def eliminarPeriodo(request,id_user,periodo_id):
     periodo = Periodo.objects.get(pk=periodo_id)
@@ -100,12 +113,16 @@ def eliminarPeriodo(request,id_user,periodo_id):
 #----------------------------
 
 def cursos(request,id_user,id_periodo):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     formularioCurso = crearCurso()
     verCursos = Curso.objects.filter(periodo_id = id_periodo)
     if request.method == 'GET':
         return render(request, 'verCursos.html', {'form': crearCurso, 
                                                   'cursos': verCursos,
-                                                  'id':id_user})
+                                                  'id':id_user,
+                                                  'perfil':perfil,
+                                                  'gruop':gruop})
     else:
         formularioCurso = crearCurso(data=request.POST)
         if formularioCurso.is_valid():
@@ -116,6 +133,8 @@ def cursos(request,id_user,id_periodo):
             return redirect('cursos',id_user,id_periodo)
     
 def editarCursos(request,id_user,curso_id, id_periodo):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     if request.method == 'GET':
         periodo = Periodo.objects.filter(predeterminado = True)
         curso = get_object_or_404(Curso, pk=curso_id)
@@ -123,7 +142,9 @@ def editarCursos(request,id_user,curso_id, id_periodo):
         return render(request, 'editarCursos.html', {'curso':curso, 
                                                      'form': form, 
                                                      'periodo':periodo,
-                                                     'id':id_user})
+                                                     'id':id_user,
+                                                     'perfil':perfil,
+                                                     'gruop':gruop})
     else:
         try:
             curso = get_object_or_404(Curso, pk=curso_id)
@@ -134,9 +155,13 @@ def editarCursos(request,id_user,curso_id, id_periodo):
             return render(request, 'editarCursos.html', {'curso':curso, 
                                                          'form': form, 
                                                          'error':'Ha ocurrido un error con los parametros ingresados',
-                                                         'id':id_user})
+                                                         'id':id_user,
+                                                         'perfil':perfil,
+                                                         'gruop':gruop})
 
 def estudiantesCursos (request,id_user,curso_idd):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     obtenerUsuario = User.objects.filter(curso_id = curso_idd)
     estudianteSinCurso = User.objects.filter(curso_id = None, groups__name='Estudiante')
     curso = Curso.objects.get(pk = curso_idd)
@@ -153,7 +178,9 @@ def estudiantesCursos (request,id_user,curso_idd):
                                             'id':id_user,
                                             'curso':curso,
                                             'estudianteSolo':estudianteSinCurso,
-                                            'periodo':periodo})
+                                            'periodo':periodo,
+                                            'perfil':perfil,
+                                            'gruop':gruop})
     
 
 def eliminarCursos(request,id_user,curso_id, id_periodo):
@@ -175,6 +202,8 @@ def eliminarAlumnoCurso(request,id_user,curso_idd,usuario_id):
 #--------------------------------
 
 def asignatura(request,id_user,id_curso):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     form = crearAsignatura()
     verAsignaturas = Asignatura.objects.filter(curso_id = id_curso)
     periodo = Periodo.objects.filter(predeterminado = True)
@@ -182,7 +211,9 @@ def asignatura(request,id_user,id_curso):
         return render(request, 'asignatura.html', {'form':form, 
                                                    'asignatura': verAsignaturas,
                                                    'periodo':periodo,
-                                                   'id':id_user})
+                                                   'id':id_user,
+                                                   'perfil':perfil,
+                                                   'gruop':gruop})
     else:
         try:
             asignatura = Asignatura.objects.create(nombre = request.POST["nombre"], curso_id = id_curso)
@@ -190,9 +221,13 @@ def asignatura(request,id_user,id_curso):
             return redirect('asignatura',id_user,id_curso)
         except:
             return render(request,'asignatura.html',id_user,id_curso, {'error':'Algo ha salido mal',
-                                                                       'id':id_user})
+                                                                       'id':id_user,
+                                                                       'perfil':perfil,
+                                                                       'gruop':gruop})
 
 def editarAsignatura(request,id_user,id_asignatura,id_curso):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     if request.method == 'GET':
         periodo = Periodo.objects.filter(predeterminado = True)
         asignatura = get_object_or_404(Asignatura, pk=id_asignatura)
@@ -200,7 +235,9 @@ def editarAsignatura(request,id_user,id_asignatura,id_curso):
         return render(request, 'editarAsignatura.html', {'asignatura':asignatura, 
                                                          'form': form, 
                                                          'periodo':periodo,
-                                                         'id':id_user})
+                                                         'id':id_user,
+                                                         'perfil':perfil,
+                                                         'gruop':gruop})
     else:
         try:
             asignatura = get_object_or_404(Asignatura, pk=id_asignatura)
@@ -214,7 +251,9 @@ def editarAsignatura(request,id_user,id_asignatura,id_curso):
                           {'curso':asignatura, 
                            'form': form, 
                            'error':'Ha ocurrido un error con los parametros ingresados',
-                           'id':id_user})
+                           'id':id_user,
+                           'perfil':perfil,
+                           'gruop':gruop})
         
 def eliminarAsignatura(request,id_user,id_asignatura,id_curso):
     asignatura = Asignatura.objects.get(pk=id_asignatura)
@@ -226,6 +265,8 @@ def eliminarAsignatura(request,id_user,id_asignatura,id_curso):
 #--------------------------------
 
 def alumnosNotas(request,id_user,id_curso, asgn_id):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     periodo = Periodo.objects.get(predeterminado=True)
     verAsignaturas = get_object_or_404(Asignatura, curso_id=id_curso, pk=asgn_id)
     estudiantes = User.objects.filter(curso_id=id_curso)
@@ -238,7 +279,9 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
             'periodo': periodo,
             'promedios': promedios,
             'notas':notirijillas,
-            'id':id_user
+            'id':id_user,
+            'perfil':perfil,
+            'gruop':gruop
         })
 
     try:
@@ -253,7 +296,9 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
             'promedios': promedios,
             'notas':notirijillas,
             'error': 'Ingrese un número válido',
-            'id':id_user
+            'id':id_user,
+            'perfil':perfil,
+            'gruop':gruop
         })
 
     evaluacion, created = Evaluacion.objects.get_or_create(
@@ -338,12 +383,16 @@ def obtenerNotas(estudiantes, asignatura_id, curso_id, periodo_id):
 #--------------------------------------
 
 def signupEstudiante(request,id_user):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     if request.method == 'GET':
         idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
         curso = Curso.objects.filter(periodo_id=idPeriodoSet[0]['id'])
         return render(request, 'signupEstudiante.html', {"form": estudianteCreation,
                                                          "curso":curso,
-                                                         'id':id_user})
+                                                         'id':id_user,
+                                                         'perfil':perfil,
+                                                         'gruop':gruop})
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
@@ -369,19 +418,27 @@ def signupEstudiante(request,id_user):
             except IntegrityError:
                 return render(request, 'signupEstudiante.html', {"form": estudianteCreation, 
                                                                  "error": "Este nombre de usuario ya existe.",
-                                                                 'id':id_user})
+                                                                 'id':id_user,
+                                                                 'perfil':perfil,
+                                                                 'gruop':gruop})
 
         return render(request, 'signupEstudiante.html', {"form": estudianteCreation, 
                                                          "error": "La contraseña no coincide",
-                                                         'id':id_user})
+                                                         'id':id_user,
+                                                         'perfil':perfil,
+                                                         'gruop':gruop})
     
 def signupDocente(request,id_user):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     if request.method == 'GET':
         idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
         curso = Curso.objects.filter(periodo_id=idPeriodoSet[0]['id'])
         return render(request, 'signupDocente.html', {"form": docenteCreation,
                                                       "curso":curso,
-                                                      'id':id_user})
+                                                      'id':id_user,
+                                                      'perfil':perfil,
+                                                      'gruop':gruop})
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
@@ -406,16 +463,24 @@ def signupDocente(request,id_user):
             except IntegrityError:
                 return render(request, 'signupDocente.html', {"form": docenteCreation, 
                                                               "error": "Este nombre de usuario ya existe.",
-                                                              'id':id_user})
+                                                              'id':id_user,
+                                                              'perfil':perfil,
+                                                              'gruop':gruop})
 
         return render(request, 'signupDocente.html', {"form": docenteCreation, 
                                                       "error": "La contraseña no coincide",
-                                                      'id':id_user}) 
+                                                      'id':id_user,
+                                                      'perfil':perfil,
+                                                      'gruop':gruop}) 
     
 def signupRI(request,id_user):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     if request.method == 'GET':
         return render(request, 'signupRI.html', {"form": RICreation,
-                                                 'id':id_user})
+                                                 'id':id_user,
+                                                 'perfil':perfil,
+                                                 'gruop':gruop})
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
@@ -438,11 +503,15 @@ def signupRI(request,id_user):
             except IntegrityError:
                 return render(request, 'signupRI.html', {"form": RICreation, 
                                                          "error": "Este nombre de usuario ya existe.",
-                                                         'id':id_user})
+                                                         'id':id_user,
+                                                         'perfil':perfil,
+                                                         'gruop':gruop})
 
         return render(request, 'signupRI.html', {"form": RICreation, 
                                                  "error": "La contraseña no coincide",
-                                                 'id':id_user}) 
+                                                 'id':id_user,
+                                                 'perfil':perfil,
+                                                 'gruop':gruop}) 
     
 def signout(request):
     logout(request)
@@ -478,11 +547,17 @@ def signin(request):
 #--------------------------------
 def listaCurso(request,id_user,id_periodo):
     curso = Curso.objects.filter(periodo_id = id_periodo)
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     return render(request,'asistenciaselectCurso.html',{'cursos':curso,
-                                                        'id':id_user})
+                                                        'id':id_user,
+                                                        'perfil':perfil,
+                                                        'gruop':gruop})
 
 def asistenciasCurso(request,id_user, id_periodo,id_curso):
     fechas = Asistencia.objects.filter(curso_id = id_curso).values_list('fecha',flat=True).distinct()
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     if fechas.exists():
         fechaUltimate = []
         for fecha in fechas:
@@ -494,7 +569,9 @@ def asistenciasCurso(request,id_user, id_periodo,id_curso):
     return render(request,'asistenciasCurso.html',{'fechas':fechaUltimate,
                                                    'curso':curso,
                                                    'periodo':id_periodo,
-                                                   'id':id_user})
+                                                   'id':id_user,
+                                                   'perfil':perfil,
+                                                   'gruop':gruop})
 
 def eliminarAsistencia(request,id_user, fecha_asistencia):
     periodo = Periodo.objects.get(predeterminado=True)
@@ -512,6 +589,8 @@ def listaAsistencia(request,id_user, id_curso, fecha_asistencia):
     asistencia_existente = Asistencia.objects.filter(fecha = fecha5, curso_id = id_curso)
     getEstudiantes = Asistencia.objects.filter(fecha = fecha5, curso_id = id_curso).values_list('usuario_id',flat=True)
     est = User.objects.filter(id__in = getEstudiantes)
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     
     if request.method == 'POST':
         for asistencia in asistencia_existente:
@@ -527,11 +606,15 @@ def listaAsistencia(request,id_user, id_curso, fecha_asistencia):
                                                      'curso':curso,
                                                      'asistencia_existente':asistencia_existente,
                                                      'periodo': periodo,
-                                                     'id':id_user})
+                                                     'id':id_user,
+                                                     'perfil':perfil,
+                                                     'gruop':gruop})
 
 def registrarAsistencia(request,id_user,id_periodo,id_curso):
     estudiantes = User.objects.filter(curso_id = id_curso ,groups__name='Estudiante')
     curso = Curso.objects.get(pk=id_curso)
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     if request.method == 'GET':
         if Asistencia.objects.filter(fecha = datetime.now().date(),curso_id = id_curso).exists():
             print("error")
@@ -542,7 +625,9 @@ def registrarAsistencia(request,id_user,id_periodo,id_curso):
                                                                 'fecha':fecha, 
                                                                 'curso':curso, 
                                                                 'periodo':id_periodo,
-                                                                'id':id_user})
+                                                                'id':id_user,
+                                                                'perfil':perfil,
+                                                                'gruop':gruop})
     else:
         for estudiante in estudiantes:
             asistio = request.POST.get(f'asistio_{estudiante.id}', 'off') == 'on'
@@ -675,6 +760,10 @@ def perfilDocente(request):
 
 def perfil_ri(request, id_user):
     periodo = Periodo.objects.filter(predeterminado = True)
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
     return render(request,'perfil_ri.html',{'periodo':periodo,
-                                            'id':id_user})
+                                            'id':id_user,
+                                            'perfil':perfil,
+                                            'gruop':gruop})
     

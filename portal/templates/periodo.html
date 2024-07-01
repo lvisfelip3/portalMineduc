@@ -15,9 +15,9 @@
         <h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="{% url 'periodo' id %}"></a>Periodo</h2>
         </div>
         <div class="bloque">
-            <a href="#">Claudia Galvez</a>
-            <a href="#">8vo Básico</a>
-            <a href="#">Colegio Padre Chaminade</a>
+            <a href="#">{{perfil.first_name}} {{perfil.last_name}}</a>
+            <a href="#">{{perfil.username}}</a>
+            <a href="#">{{gruop.name}}</a>
         </div>
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>
@@ -84,9 +84,9 @@
                         {% for p in periodo %}
                         <tr>
                             {%if p.predeterminado == True%}
-                            <td><li><a href="{% url 'cursos' id p.id %}" id="materia">{{p.nombre}}</a></li></td>
+                            <td><li><a href="{% url 'cursos' id p.id %}" id="materia" style="text-transform: capitalize;">{{p.nombre}}</a></li></td>
                             {%else%}
-                            <td><a href="{% url 'cursos' id p.id %}" id="materia">{{p.nombre}}</a></td>
+                            <td><a href="{% url 'cursos' id p.id %}" id="materia" style="text-transform: capitalize;">{{p.nombre}}</a></td>
                             {%endif%}
                             <td>{{p.fecha_inicio}}</td>
                             <td>{{p.fecha_fin}}</td>

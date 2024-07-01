@@ -145,6 +145,7 @@ header a{
 
 header a:first-child{
     font-weight: bold;
+    text-transform: capitalize;
 }
 
 

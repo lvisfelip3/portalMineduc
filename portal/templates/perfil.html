@@ -17,7 +17,7 @@
         {% endblock %}
         <div class="bloque">
             <a href="#">{{estudiante.first_name}} {{estudiante.last_name}}</a>
-            <a href="#">{{curso.nombre}}</a>
+            <a href="#" style="text-transform: capitalize;">{{curso.nombre}}</a>
             <a href="#">Estudiante</a>
         </div>
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
@@ -90,13 +90,13 @@
     <content>
         <div class="card">
             <section>
-            <h3>{{curso.nombre}}</h3>
+            <h3 style="text-transform: capitalize;">{{curso.nombre}}</h3>
             <span>Promedios</span>
             </section>
             <section>
                 <ul id="asignaturas">
                     {% for a in asignaturas %}
-                    <li>
+                    <li style="text-transform: capitalize;">
                         {{a.nombre}}
                     </li>
                     {% endfor %}
@@ -120,7 +120,7 @@
         </div>
         {% for a in asignaturas %}
         <div class="card">
-            <h3>{{a.nombre}}</h3>
+            <h3 style="text-transform: capitalize;">{{a.nombre}}</h3>
             <ul>
                 {% if notas|default_if_none:'' %}
                 {% for nota in notas|get_item:a.id %}

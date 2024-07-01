@@ -15,9 +15,9 @@
         <h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2> > </h2> <h2 class="headerlink">{%for p in periodo%}<a href="{% url 'cursos' id p.id%}"></a>{%endfor%}Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>Asignaturas</h2>
         </div>
         <div class="bloque">
-            <a href="#">Claudia Galvez</a>
-            <a href="#">8vo Básico</a>
-            <a href="#">Colegio Padre Chaminade</a>
+            <a href="#">{{perfil.first_name}} {{perfil.last_name}}</a>
+            <a href="#">{{perfil.username}}</a>
+            <a href="#">{{gruop.name}}</a>
         </div>
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>
@@ -81,7 +81,7 @@
                     <tbody>
                         {% for a in asignatura %}
                         <tr>
-                            <td><a href="" id="materia" style="cursor: default;">{{a.nombre}}</a></td>
+                            <td><a href="" id="materia" style="cursor: default; text-transform: capitalize;">{{a.nombre}}</a></td>
                             <td><a href="{% url 'editarAsignatura' id a.curso.id a.id %}"class="opcion">Editar</a>
                                 <a href="{% url 'alumnosNotas' id a.curso_id a.id %}"class="opcion">Evaluaciones</a>
                                 <a href="{% url 'eliminarAsignatura' id a.curso_id a.id %}"class="opcion">Eliminar</a>
