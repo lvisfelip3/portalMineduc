@@ -1,10 +1,18 @@
 {%extends "editarCursos.html"%}
 {%block links%}
-<h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2><h2> > </h2>{%for p in periodo%}<h2 class="headerlink"><a href="{% url 'cursos' id p.id%}"></a>{%endfor%}Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href="{% url 'asignatura' id asignatura.curso_id%}"></a>Asignaturas</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>{{asignatura.nombre}}</h2>
+{% if perfil.groups_id == 3 %}
+<h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2><h2> > </h2><h2 class="headerlink"><a href="{% url 'cursos' id periodo.id%}"></a>Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href="{% url 'asignatura' id asignatura.curso_id%}"></a>Asignaturas</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>{{asignatura.nombre}}</h2>
+{% else %}
+</h2><h2 class="headerlink"><a href="{% url 'cursos' id periodo.id%}"></a>Cursos</h2><h2> > </h2> <h2 class="headerlink"><a href="{% url 'asignatura' id asignatura.curso_id%}"></a>Asignaturas</h2><h2> > </h2> <h2 class="headerlink"><a href=""></a>{{asignatura.nombre}}</h2>
+{% endif %}
 {%endblock%}
 
 {% block content %}
+{% if perfil.groups_id == 3 %}
 <content style="display: flex; align-items: center; justify-content: center;">
+{% else %}
+<content style="background:linear-gradient(52deg, rgba(235,60,70,1) 0%, rgba(15,105,180,1) 100%); display: flex; align-items: center; justify-content: center;">
+{% endif %}
     <dialog open style="margin: 0; position: relative;">
         <form method="POST">
             {%csrf_token%}

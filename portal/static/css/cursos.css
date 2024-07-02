@@ -253,6 +253,27 @@ table td{
     }
 }
 
+.card #asignaturas{
+    background-color: #008f37;
+    color: #FDFBF6;
+    transition: all 150ms;
+    margin-left: 5px;
+    &:hover{
+        background-color: #005004;
+        transform: scale(1.03);
+    }
+}
+
+.card #asist{
+    background-color: #09f;
+    color: white;
+    width:105px;
+    &:hover{
+        background-color: rgb(1, 100, 167);
+        transform: scale(1.03);
+    }
+}
+
 .card #materia{
     text-decoration: none;
     color: #222a30;
@@ -416,6 +437,9 @@ dialog button:hover{
     
     aside .bloque{
         margin:17px;
+    }
+    aside .bloque:last-child{
+        margin-bottom: 5px
     }
     aside a{
         text-decoration: none;

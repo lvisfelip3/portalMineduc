@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group
-from .models import User, Curso, Periodo, Asignatura, Evaluacion, Asistencia
+from .models import User, Curso, Periodo, Asignatura, Evaluacion, Asistencia, Clase
 from .forms import crearCurso, crearPeriodo, crearAsignatura, estudianteCreation, docenteCreation, RICreation
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.db import IntegrityError
@@ -115,6 +115,7 @@ def eliminarPeriodo(request,id_user,periodo_id):
 def cursos(request,id_user,id_periodo):
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
+    periodo = Periodo.objects.get(pk = id_periodo)
     formularioCurso = crearCurso()
     verCursos = Curso.objects.filter(periodo_id = id_periodo)
     if request.method == 'GET':
@@ -122,7 +123,8 @@ def cursos(request,id_user,id_periodo):
                                                   'cursos': verCursos,
                                                   'id':id_user,
                                                   'perfil':perfil,
-                                                  'gruop':gruop})
+                                                  'gruop':gruop,
+                                                  'periodo':periodo})
     else:
         formularioCurso = crearCurso(data=request.POST)
         if formularioCurso.is_valid():
@@ -205,15 +207,17 @@ def asignatura(request,id_user,id_curso):
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
     form = crearAsignatura()
+    curso = Curso.objects.get(pk = id_curso)
     verAsignaturas = Asignatura.objects.filter(curso_id = id_curso)
-    periodo = Periodo.objects.filter(predeterminado = True)
+    periodo = Periodo.objects.get(predeterminado = True)
     if request.method == 'GET':
         return render(request, 'asignatura.html', {'form':form, 
                                                    'asignatura': verAsignaturas,
                                                    'periodo':periodo,
                                                    'id':id_user,
                                                    'perfil':perfil,
-                                                   'gruop':gruop})
+                                                   'gruop':gruop,
+                                                   'curso':curso})
     else:
         try:
             asignatura = Asignatura.objects.create(nombre = request.POST["nombre"], curso_id = id_curso)
@@ -223,13 +227,14 @@ def asignatura(request,id_user,id_curso):
             return render(request,'asignatura.html',id_user,id_curso, {'error':'Algo ha salido mal',
                                                                        'id':id_user,
                                                                        'perfil':perfil,
-                                                                       'gruop':gruop})
+                                                                       'gruop':gruop,
+                                                                       'curso':curso})
 
 def editarAsignatura(request,id_user,id_asignatura,id_curso):
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
+    periodo = Periodo.objects.get(predeterminado = True)
     if request.method == 'GET':
-        periodo = Periodo.objects.filter(predeterminado = True)
         asignatura = get_object_or_404(Asignatura, pk=id_asignatura)
         form = crearAsignatura(instance=asignatura)
         return render(request, 'editarAsignatura.html', {'asignatura':asignatura, 
@@ -378,6 +383,7 @@ def obtenerNotas(estudiantes, asignatura_id, curso_id, periodo_id):
         else:
             notasEst[estudiante.id] = None
     return notasEst
+
 #--------------------------------------
 #--------- LOGIN Y REGISTRO -----------
 #--------------------------------------
@@ -385,6 +391,8 @@ def obtenerNotas(estudiantes, asignatura_id, curso_id, periodo_id):
 def signupEstudiante(request,id_user):
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
+    idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
+    curso = Curso.objects.filter(periodo_id=idPeriodoSet[0]['id'])
     if request.method == 'GET':
         idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
         curso = Curso.objects.filter(periodo_id=idPeriodoSet[0]['id'])
@@ -420,22 +428,21 @@ def signupEstudiante(request,id_user):
                                                                  "error": "Este nombre de usuario ya existe.",
                                                                  'id':id_user,
                                                                  'perfil':perfil,
-                                                                 'gruop':gruop})
+                                                                 'gruop':gruop,
+                                                                 'curso':curso})
 
         return render(request, 'signupEstudiante.html', {"form": estudianteCreation, 
                                                          "error": "La contraseña no coincide",
                                                          'id':id_user,
                                                          'perfil':perfil,
-                                                         'gruop':gruop})
+                                                         'gruop':gruop,
+                                                         'curso':curso})
     
 def signupDocente(request,id_user):
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
     if request.method == 'GET':
-        idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
-        curso = Curso.objects.filter(periodo_id=idPeriodoSet[0]['id'])
         return render(request, 'signupDocente.html', {"form": docenteCreation,
-                                                      "curso":curso,
                                                       'id':id_user,
                                                       'perfil':perfil,
                                                       'gruop':gruop})
@@ -456,7 +463,7 @@ def signupDocente(request,id_user):
                                                 imagenPerfil = request.POST["imagenPerfil"], 
                                                 direccion = request.POST["direccion"],
                                                 fecha_nacimiento = request.POST["fecha_nacimiento"],
-                                                curso_id = request.POST["curso"],
+                                                #curso_id = request.POST["curso"],
                                                 groups_id = docente)
                 user.save()
                 return redirect('perfil_ri',id_user)
@@ -524,6 +531,7 @@ def signin(request):
         estudiante = Group.objects.get(name="Estudiante").user_set.all()
         docente = Group.objects.get(name="Docente").user_set.all()
         ri = Group.objects.get(name="Responsable Institucional").user_set.all()
+        periodo = Periodo.objects.get(predeterminado = True)
         username2 = request.POST['username']
         password2 = request.POST['password']
         id_usuario = User.objects.get(username = username2)
@@ -536,9 +544,12 @@ def signin(request):
             if user in estudiante:  
                 auth_login(request, user)
                 return redirect('perfil', id_usuario.id)
-            elif user in ri or docente:  
+            elif user in ri:  
                 auth_login(request, user)
                 return redirect('perfil_ri', id_usuario.id)
+            elif user in docente:  
+                auth_login(request, user)
+                return redirect('cursos', id_usuario.id, periodo.id)
             else:
                 return render(request, 'signin.html',{"error":"ha ocurrido un error"})
 
@@ -549,15 +560,18 @@ def listaCurso(request,id_user,id_periodo):
     curso = Curso.objects.filter(periodo_id = id_periodo)
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
+    periodo = Periodo.objects.get(pk = id_periodo)
     return render(request,'asistenciaselectCurso.html',{'cursos':curso,
                                                         'id':id_user,
                                                         'perfil':perfil,
-                                                        'gruop':gruop})
+                                                        'gruop':gruop,
+                                                        'periodo':periodo})
 
 def asistenciasCurso(request,id_user, id_periodo,id_curso):
     fechas = Asistencia.objects.filter(curso_id = id_curso).values_list('fecha',flat=True).distinct()
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
+    periodo = Periodo.objects.get(pk = id_periodo)
     if fechas.exists():
         fechaUltimate = []
         for fecha in fechas:
@@ -568,7 +582,7 @@ def asistenciasCurso(request,id_user, id_periodo,id_curso):
     curso = Curso.objects.get(id = id_curso)
     return render(request,'asistenciasCurso.html',{'fechas':fechaUltimate,
                                                    'curso':curso,
-                                                   'periodo':id_periodo,
+                                                   'periodo':periodo,
                                                    'id':id_user,
                                                    'perfil':perfil,
                                                    'gruop':gruop})
@@ -615,6 +629,7 @@ def registrarAsistencia(request,id_user,id_periodo,id_curso):
     curso = Curso.objects.get(pk=id_curso)
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
+    periodo = Periodo.objects.get(pk = id_periodo)
     if request.method == 'GET':
         if Asistencia.objects.filter(fecha = datetime.now().date(),curso_id = id_curso).exists():
             print("error")
@@ -624,7 +639,7 @@ def registrarAsistencia(request,id_user,id_periodo,id_curso):
             return render(request, 'registrarAsistencia.html', {'estudiantes': estudiantes, 
                                                                 'fecha':fecha, 
                                                                 'curso':curso, 
-                                                                'periodo':id_periodo,
+                                                                'periodo':periodo,
                                                                 'id':id_user,
                                                                 'perfil':perfil,
                                                                 'gruop':gruop})
@@ -642,7 +657,41 @@ def registrarAsistencia(request,id_user,id_periodo,id_curso):
         )
         return redirect('asistenciasCurso',id_user,id_periodo,id_curso)
 
-            
+#--------------------------------------
+#-------------- CLASES ----------------
+#--------------------------------------
+
+def listaCursosClases(request,id_user,id_periodo):
+    curso = Curso.objects.filter(periodo_id = id_periodo)
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
+    return render(request, 'listaCursosClases.html',{'id':id_user,
+                                                    'perfil':perfil,
+                                                    'gruop':gruop,
+                                                    'curso':curso})
+
+def clasesCurso(request,id_user, id_periodo,id_curso):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
+    clases = Clase.objects.filter(curso_id = id_curso, periodo_id = id_periodo)
+    curso = Curso.objects.get(id = id_curso)
+    return render(request,'clasesCurso.html',{'clases':clases,
+                                              'curso':curso,
+                                              'periodo':id_periodo,
+                                              'id':id_user,
+                                              'perfil':perfil,
+                                              'gruop':gruop})
+
+def registrarClase(request,id_user,id_periodo,id_curso):
+    perfil = User.objects.get(pk = id_user)
+    gruop = Group.objects.get(pk = perfil.groups_id)
+    if request.method == 'GET':
+        return render(request,'registrarClase.html',{'perfil':perfil,
+                                                    'gruop':gruop})
+    else:
+        return redirect('clasesCurso')
+
+
 #------------------------------
 #--------- PERFILES -----------
 #------------------------------
@@ -755,11 +804,8 @@ def asistencia(request, id_estudiante):
                                               'porcentaje':porcentajeAsistencia,
                                               'inasistencias':inasistencias})
 
-def perfilDocente(request):
-    return render(request,'perfilDocente.html')
-
 def perfil_ri(request, id_user):
-    periodo = Periodo.objects.filter(predeterminado = True)
+    periodo = Periodo.objects.get(predeterminado = True)
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
     return render(request,'perfil_ri.html',{'periodo':periodo,

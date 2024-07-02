@@ -10,13 +10,6 @@
             <form method="POST">
                 {% csrf_token %}
                 {{form}}
-                <label>Curso:
-                    <select name="curso">
-                        {% for c in curso %}
-                        <option value={{c.id}}>{{c.nombre}}</option>
-                        {% endfor %}
-                    </select>
-                </label>
                 <button>Crear</button>
             </form>
         </div>

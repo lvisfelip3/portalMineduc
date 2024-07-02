@@ -193,6 +193,11 @@ content{
     aside .bloque{
         margin:17px;
     }
+
+    aside .bloque:last-child{
+        margin-bottom: 5px
+    }
+    
     aside a{
         text-decoration: none;
         color: #3C3C3C;

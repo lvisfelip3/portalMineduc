@@ -50,10 +50,18 @@ class Asignatura(models.Model):
     def __str__(self):
         return self.nombre
     
+dias = [
+    ['Lunes', 'Lunes'],
+    ['Martes', 'Martes'],
+    ['Miercoles', 'Miercoles'],
+    ['Jueves', 'Jueves'],
+    ['Viernes', 'Viernes'],
+]
 class Clase(models.Model):
     nombre = models.CharField(max_length=30)
     hora_inicio = models.TimeField(blank=False)
     hora_termino = models.TimeField(blank=False)
+    dia = models.CharField(choices=dias, default='Lunes', max_length=10)
     periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)

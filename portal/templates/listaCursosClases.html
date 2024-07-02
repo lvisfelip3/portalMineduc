@@ -1,18 +1,10 @@
 {% extends 'verCursos.html' %}
 {%block links%}
-{% if perfil.groups_id == 3 %}
 <h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href=""></a>Cursos</h2>
-{% else %}
-<h2 class="headerlink"><a href=""></a>Asistencia</h2>
-{% endif %}
 {%endblock%}
 
 {% block content %}
-{% if perfil.groups_id == 3 %}
 <content>
-{% else %}
-<content style="background:linear-gradient(52deg, rgba(235,60,70,1) 0%, rgba(15,105,180,1) 100%);">
-{% endif %}
     <div class="card" style="margin-top: 50px;">
         <div class="table">
             <table>
@@ -23,9 +15,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for c in cursos %}
+                    {% for c in curso %}
                     <tr>
-                        <td><a href="{% url 'asistenciasCurso' id c.periodo_id  c.id %}" id="materia" style="text-transform: capitalize;">{{c.nombre}}</a></td>
+                        <td><a href="{% url 'clasesCurso' id c.periodo_id  c.id %}" id="materia" style="text-transform: capitalize;">{{c.nombre}}</a></td>
                         <td>{{c.seccion}}</td>
                         </td>
                     </tr>

@@ -295,6 +295,11 @@ content details:last-child{
     aside .bloque{
         margin:17px;
     }
+
+    aside .bloque:last-child{
+        margin-bottom: 5px
+    }
+    
     aside a{
         text-decoration: none;
         color: #3C3C3C;
@@ -334,4 +339,16 @@ content details:last-child{
         display: block;
         margin: 3px;
     }
+
+    content{
+        padding: 40px 50px;
+        .card{
+            max-height: 445px;
+        }
+        details{
+            font-size: 30px;
+        }
+    }
+    
+    
 }

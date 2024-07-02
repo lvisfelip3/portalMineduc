@@ -10,6 +10,7 @@ body {
     min-height: 100dvh;
     max-height: 100dvh;
     margin: 0;
+    overflow: hidden;
     grid-template-columns: minmax(300px, 400px) 1fr;
     grid-template-rows: 115px 1fr;
     grid-template-areas: 
@@ -145,7 +146,7 @@ content{
     overflow-y: auto;
     max-height: 100dvh;
     &::-webkit-scrollbar {
-        width: 13px;
+        width: 10px;
         background-color: rgba(241,81,81,1);
         border-radius: 150px;
       }
@@ -184,7 +185,6 @@ content{
     grid-area: notas;
     height: min-content;
     width: 100%;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -277,7 +277,7 @@ content{
 
     content{
         gap: 20px;
-        padding:50px 80px;
+        padding:50px 50px;
     }
 
     .card:first-child{
@@ -285,26 +285,32 @@ content{
     
         section:first-child{
             h3{
-                font-size: 40px;
+                font-size: 35px;
             }
             span{
-                font-size: 20px;
+                font-size: 15px;
             }
         }
         section:last-child{
             #asignaturas{
-                font-size: 25px;
+                font-size: 20px;
             }
             #notas{
-                font-size: 25px;
+                font-size: 20px;
             }
         }
     }
     
     .card:nth-child(2){
         .promedio{
-            font-size: 110px;
+            font-size: 100px;
         }
+        h3{
+            font-size: 25px;
+        }
+    }
+
+    .card{
         h3{
             font-size: 25px;
         }
@@ -328,6 +334,11 @@ content{
     aside .bloque{
         margin:17px;
     }
+    
+    aside .bloque:last-child{
+        margin-bottom: 5px
+    }
+    
     aside a{
         text-decoration: none;
         color: #3C3C3C;
