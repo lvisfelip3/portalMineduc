@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+body{
+    min-height: 100dvh;
+    max-height: 100dvh;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 60px 1fr 60px;
+    grid-template-areas: 
+                        ". . ."
+                        ". content ."
+                        ". . .";
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    background:linear-gradient(90deg, rgba(103,97,242,1) 0%, rgba(241,81,81,1) 100%);
+    overflow-y: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.card{
+    grid-area: content;
+    background-color: whitesmoke;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr;
+    grid-template-areas: "titulo"
+                         "form";
+    border-radius: 8px;
+    padding:30px 10px;
+    width:70%;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    h1{
+        grid-area: titulo;
+        justify-self: center;
+        align-self: center;
+        margin:0;
+        font-size: 50px;
+        cursor: default;
+        transition: 160ms all;
+        &:hover{
+            color: #593cff;
+        }
+    }
+
+    .portal{
+        position: absolute;
+        top: 0;
+        left: 15px;
+        img{
+            height: 15px;
+            width: 140px;
+            display: block;
+        }
+        span{
+            display: block;
+            font-size: 19px;
+            text-align: center;
+        }
+    }
+}
+
+form{
+    grid-area: form;
+    display: grid;
+    grid-template-rows: 1fr 60px 10px 1fr;
+    padding: 20px;
+    gap: 10px;
+    input{
+        width: 100%;
+        border-radius: 50rem;
+        background-color: #dedede;
+        height: 50px;
+        border: none;
+        outline: none;
+        font-size: 25px;
+        padding: 0 10px;
+        transition: 100ms all;
+        &:focus{
+            outline: 2px solid #593cff;
+        }
+    }
+    a{
+        font-style: italic;
+        color: rgb(36, 36, 36);
+        transition: 150ms all;
+        &:hover{
+            color: #593cff;
+        }
+    }
+    button{
+        width: 100%;
+        height: 50px;
+        background-color: #09f;
+        border-radius: 50rem;
+        text-align: center;
+        border: none;
+        outline: none;
+        color: white;
+        font-size: 25px;
+        align-self: end;
+        font-weight: 600;
+        transition: 150ms all;
+        &:hover{
+            background-color: #593cff;
+        }
+    }
+}

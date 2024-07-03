@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Mineduc - LogIn</title>
+    <title>Portal Mineduc - Login</title>
 </head>
 <body>
-
-    {{error}}
-
-    <form method="POST">
-    {% csrf_token %}
-    {{form}}
-    <button>Ingresar</button>
-    </form>
+    <div class="card">
+        <div class="portal">
+            <img src="{% static 'img/logotop.jpg' %}">
+            <span><strong>Mineduc</strong> Portal</span>
+        </div>
+        {{error}}
+        <h1>Inicia Sesión</h1>
+        <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <a href="">¿Olvidaste tu Contraseña?</a>
+            <button type="submit">INGRESAR</button>
+        </form>
+    </div>
 </body>
 </html>
