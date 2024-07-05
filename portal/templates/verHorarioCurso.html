@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% load filters %}
+    <link rel="stylesheet" href="{% static 'css/clases.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Mineduc - RI</title>
+    
+    
+</head>
+<body>
+    <header>
+        <div class="links">
+        {%block links%}
+        {% if perfil.groups_id == 3 %}
+        <h2 class="headerlink"><a href="{% url 'perfil_ri' perfil.id %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href=""></a>Clases</h2>
+        {% else %}
+        <h2 class="headerlink"><a href=""></a>Cursos</h2>
+        {% endif %}
+        {%endblock%}
+        </div>
+        <div class="bloque">
+            <a href="#">{{perfil.first_name}} {{perfil.last_name}}</a>
+            <a href="#">{{perfil.username}}</a>
+            <a href="#">{{gruop.name}}</a>
+        </div>
+        <img src="{% static 'img/profilePicture.webp' %}" alt="">
+    </header>
+
+    <aside>
+        <img src="{% static 'img/logotop.jpg' %}" alt="">
+        <span><strong>Mineduc</strong> Portal</span>
+        <div class="bloque">
+            <span class="lista">
+                <svg 
+                    class="icon" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <g fill="3C3C3C">
+                        <path d="M12.5 5.4a1 1 0 0 0-1 0L5.1 9l6.4 3.6a1 1 0 0 0 1 0L18.9 9l-6.4-3.6zm-2-1.7a3 3 0 0 1 3 0l8 4.4a1 1 0 0 1 0 1.8l-8 4.4a3 3 0 0 1-3 0l-8-4.4a1 1 0 0 1 0-1.8l8-4.4z"/>
+                        <path d="M21 8a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1zM6 10a1 1 0 0 1 1 1v5.4l4.6 2.3a1 1 0 0 0 .8 0l4.6-2.3V11a1 1 0 1 1 2 0v6a1 1 0 0 1-.6.9l-5 2.5a3 3 0 0 1-2.7 0L5.6 18a1 1 0 0 1-.6-1v-6a1 1 0 0 1 1-1z"/>
+                    </g>
+                </svg>
+                <a href="{% url 'perfil_ri' perfil.id %}">Académico</a>
+            </span>
+            <span class="lista">
+                <svg 
+                    class="icon" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <g fill="3C3C3C">
+                        <path d="M12.5 5.4a1 1 0 0 0-1 0L5.1 9l6.4 3.6a1 1 0 0 0 1 0L18.9 9l-6.4-3.6zm-2-1.7a3 3 0 0 1 3 0l8 4.4a1 1 0 0 1 0 1.8l-8 4.4a3 3 0 0 1-3 0l-8-4.4a1 1 0 0 1 0-1.8l8-4.4z"/>
+                        <path d="M21 8a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1zM6 10a1 1 0 0 1 1 1v5.4l4.6 2.3a1 1 0 0 0 .8 0l4.6-2.3V11a1 1 0 1 1 2 0v6a1 1 0 0 1-.6.9l-5 2.5a3 3 0 0 1-2.7 0L5.6 18a1 1 0 0 1-.6-1v-6a1 1 0 0 1 1-1z"/>
+                    </g>
+                </svg>
+                <div class="dropdown">
+                    <a>Clases <div class="rotate">></div></a>
+                    <div class="items">
+                        {% if cursos is not none %}
+                        {% for curso in cursos %}
+                        <a href="{% url 'horarioCurso' perfil.id periodo.id curso.id%}">{{curso.nombre}}</a>
+                        {% endfor %}
+                        {% else %}
+                        <h1>Agrega cursos al periodo</h1>
+                        {% endif %}
+                    </div>
+                </div>
+            </span>
+        </div>
+
+        <div class="bloque">
+            <span class="lista">
+                <svg class="icon" 
+                    viewBox="0 0 20 20" 
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.563 18H3.438c-.706 0-1.228-.697-.961-1.338C3.713 13.698 6.617 12 10 12c3.384 0 6.288 1.698 7.524 4.662.267.641-.255 1.338-.961 1.338M5.917 6c0-2.206 1.832-4 4.083-4 2.252 0 4.083 1.794 4.083 4S12.252 10 10 10c-2.251 0-4.083-1.794-4.083-4m14.039 11.636c-.742-3.359-3.064-5.838-6.119-6.963 1.619-1.277 2.563-3.342 2.216-5.603-.402-2.623-2.63-4.722-5.318-5.028C7.023-.381 3.875 2.449 3.875 6c0 1.89.894 3.574 2.289 4.673-3.057 1.125-5.377 3.604-6.12 6.963C-.226 18.857.779 20 2.054 20h15.892c1.276 0 2.28-1.143 2.01-2.364" 
+                    fill="#3C3C3C" 
+                    fill-rule="evenodd"/>
+                </svg>
+                <a href="#">Mi perfil</a>
+            </span>
+            {% if user.is_authenticated %}
+            <span class="lista">
+                <svg class="icon" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 511.996 511.996" 
+                    xml:space="preserve">
+                    <path d="M349.85 62.196c-10.797-4.717-23.373.212-28.09 11.009-4.717 10.797.212 23.373 11.009 28.09 69.412 30.324 115.228 98.977 115.228 176.035 0 106.034-85.972 192-192 192-106.042 0-192-85.958-192-192 0-77.041 45.8-145.694 115.192-176.038 10.795-4.72 15.72-17.298 10.999-28.093-4.72-10.795-17.298-15.72-28.093-10.999C77.306 99.275 21.331 183.181 21.331 277.329c0 129.606 105.061 234.667 234.667 234.667 129.592 0 234.667-105.068 234.667-234.667 0-94.17-55.998-178.08-140.815-215.133z"/><path d="M255.989 234.667c11.782 0 21.333-9.551 21.333-21.333v-192C277.323 9.551 267.771 0 255.989 0c-11.782 0-21.333 9.551-21.333 21.333v192c0 11.782 9.551 21.334 21.333 21.334z"/>
+                </svg>
+                <a href="/logout">Cerrar Sesión</a>
+            </span>
+            {% endif %}
+        </div>
+    </aside>
+
+    <content>
+
+        <div class="botonera">
+            <button type="submit" id="abrirPopup"><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>Registrar Clase</button>
+            <p class="titulo" style="text-transform: capitalize;">{{periodo.nombre}}</p><p class="titulo" style="text-transform: capitalize;">{{curso.nombre}}</p>
+        </div>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for dia in dias %}
+                            <th>{{ dia }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hora in horas %}
+                        <tr>
+                            <div class="linea">
+                                <td class="hora">{{ hora }}</td>
+                                {% for dia in dias %}
+                                    <td>
+                                        {% with clase|get_item:dia|get_item:hora as clase_actual %}
+                                            {% if clase_actual %}
+                                                <span class="conRamo">{{ clase_actual.nombre }}</span>
+                                            {% else %}
+                                                <span class="sinRamo">Libre</span>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </td>
+                                {% endfor %}
+                            </div>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        
+        <dialog id="popup">
+            <form method="POST">
+                {% csrf_token %}
+                <label>Asignatura:
+                    <select name="asignatura" id="asignatura">
+                        {% for asignatura in asignaturas %}
+                        <option value="{{ asignatura.id }}">{{ asignatura.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>Hora: 
+                    <select name="hora" id="hora">
+                        {% for hora in horas %}
+                        <option value="{{ hora }}">{{ hora }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>Dia: 
+                    <select name="dia" id="dia">
+                        {% for dia in dias %}
+                        <option value="{{ dia }}">{{ dia }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <button type="submit">hola mundo</button>
+            </form>
+        </dialog>
+    </content>
+<script src="{% static 'js/dialog.js' %}"></script>
+<script src="{% static 'js/hover.js' %}"></script>
+</body>
+</html>

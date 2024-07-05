@@ -45,7 +45,18 @@
                         <path d="M21 8a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1zM6 10a1 1 0 0 1 1 1v5.4l4.6 2.3a1 1 0 0 0 .8 0l4.6-2.3V11a1 1 0 1 1 2 0v6a1 1 0 0 1-.6.9l-5 2.5a3 3 0 0 1-2.7 0L5.6 18a1 1 0 0 1-.6-1v-6a1 1 0 0 1 1-1z"/>
                     </g>
                 </svg>
-                <a href="{% url 'listaCursosClases' id periodo.id%}">Clases</a>
+                <div class="dropdown">
+                    <a>Clases <div class="rotate">></div></a>
+                    <div class="items">
+                        {% if cursos is not none %}
+                        {% for curso in cursos %}
+                        <a href="{% url 'horarioCurso' id periodo.id curso.id%}">{{curso.nombre}}</a>
+                        {% endfor %}
+                        {% else %}
+                        <h1>Agrega cursos al periodo</h1>
+                        {% endif %}
+                    </div>
+                </div>
             </span>
         </div>
 

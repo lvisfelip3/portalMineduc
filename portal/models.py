@@ -37,7 +37,7 @@ class User(AbstractUser):
     direccion = models.CharField(max_length=50, null=True)
     telefono = models.CharField(max_length=10, null=True)
     imagenPerfil = models.ImageField(upload_to="imagen_perfil", null=True, blank=True)
-    curso = models.ForeignKey(Curso, on_delete=models.SET_NULL, null=True)
+    curso = models.ForeignKey(Curso, on_delete=models.SET_NULL, null=True, blank=True)
     groups = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
@@ -50,22 +50,14 @@ class Asignatura(models.Model):
     def __str__(self):
         return self.nombre
     
-dias = [
-    ['Lunes', 'Lunes'],
-    ['Martes', 'Martes'],
-    ['Miercoles', 'Miercoles'],
-    ['Jueves', 'Jueves'],
-    ['Viernes', 'Viernes'],
-]
+
 class Clase(models.Model):
-    nombre = models.CharField(max_length=30)
-    hora_inicio = models.TimeField(blank=False)
-    hora_termino = models.TimeField(blank=False)
-    dia = models.CharField(choices=dias, default='Lunes', max_length=10)
+    nombre = models.CharField(max_length=30, null=True)
+    hora = models.CharField(max_length=6)
+    dia = models.CharField(max_length=10)
     periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nombre

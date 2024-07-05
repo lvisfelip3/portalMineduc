@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group
 from .models import User, Curso, Periodo, Asignatura, Evaluacion, Asistencia, Clase
-from .forms import crearCurso, crearPeriodo, crearAsignatura, estudianteCreation, docenteCreation, RICreation
+from .forms import crearCurso, crearPeriodo, crearAsignatura, estudianteCreation, docenteCreation, RICreation, crearClase
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.db import IntegrityError
 from datetime import datetime
@@ -15,6 +15,20 @@ def login(request):
     return render(request, 'login.html')
 
 def index(request):
+    try:
+        User.objects.get(groups_id = 3)
+    except User.DoesNotExist:
+        User.objects.create_user(groups_id = 3,
+                                 username = 'PortalMineduc',
+                                 first_name = 'Portal',
+                                 last_name = 'Mineduc',
+                                 fecha_nacimiento = None,
+                                 edad = None,
+                                 direccion = None,
+                                 telefono = None,
+                                 password = 'PortalMineduc123'
+                                )
+        print("Usuario creado con exito")
     return render(request,'index.html')
 #-----------------------------
 #--------- PERIODO -----------
@@ -26,7 +40,7 @@ def periodo(request, id_user):
     form = crearPeriodo()
     periodo = Periodo.objects.all()
     if request.method == 'GET':
-        return render(request, 'periodo.html',{'form':form, 
+        return render(request, 'periodo.html',{'form':form,
                                                'periodo':periodo,
                                                'id':id_user,
                                                'perfil':perfil,
@@ -209,6 +223,10 @@ def asignatura(request,id_user,id_curso):
     form = crearAsignatura()
     curso = Curso.objects.get(pk = id_curso)
     verAsignaturas = Asignatura.objects.filter(curso_id = id_curso)
+    if verAsignaturas.count() == 0:
+        contadorAsignatura = None
+    else:
+        contadorAsignatura = 1
     periodo = Periodo.objects.get(predeterminado = True)
     if request.method == 'GET':
         return render(request, 'asignatura.html', {'form':form, 
@@ -217,7 +235,8 @@ def asignatura(request,id_user,id_curso):
                                                    'id':id_user,
                                                    'perfil':perfil,
                                                    'gruop':gruop,
-                                                   'curso':curso})
+                                                   'curso':curso,
+                                                   'contador':contadorAsignatura})
     else:
         try:
             asignatura = Asignatura.objects.create(nombre = request.POST["nombre"], curso_id = id_curso)
@@ -272,9 +291,14 @@ def eliminarAsignatura(request,id_user,id_asignatura,id_curso):
 def alumnosNotas(request,id_user,id_curso, asgn_id):
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
+    curso = Curso.objects.get(pk = id_curso)
     periodo = Periodo.objects.get(predeterminado=True)
     verAsignaturas = get_object_or_404(Asignatura, curso_id=id_curso, pk=asgn_id)
     estudiantes = User.objects.filter(curso_id=id_curso)
+    if estudiantes.count() == 0:
+        estudiantess = None
+    else:
+        estudiantess = 1
     promedios = calcularPromedios(estudiantes, verAsignaturas.id, id_curso, periodo.id)
     notirijillas = obtenerNotas(estudiantes, verAsignaturas.id, id_curso, periodo.id)
     if request.method == 'GET':
@@ -286,7 +310,9 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
             'notas':notirijillas,
             'id':id_user,
             'perfil':perfil,
-            'gruop':gruop
+            'gruop':gruop,
+            'estudiantess':estudiantess,
+            'curso':curso
         })
 
     try:
@@ -303,7 +329,9 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
             'error': 'Ingrese un número válido',
             'id':id_user,
             'perfil':perfil,
-            'gruop':gruop
+            'gruop':gruop,
+            'estudiantess':estudiantess,
+            'curso':curso
         })
 
     evaluacion, created = Evaluacion.objects.get_or_create(
@@ -328,7 +356,9 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
             'promedios': promedios,
             'notas':notirijillas,
             'error': 'Todas las notas están completas',
-            'id':id_user
+            'id':id_user,
+            'estudiantess':estudiantess,
+            'curso':curso
         })
         
 
@@ -531,10 +561,29 @@ def signin(request):
         estudiante = Group.objects.get(name="Estudiante").user_set.all()
         docente = Group.objects.get(name="Docente").user_set.all()
         ri = Group.objects.get(name="Responsable Institucional").user_set.all()
-        periodo = Periodo.objects.get(predeterminado = True)
         username2 = request.POST['username']
         password2 = request.POST['password']
         id_usuario = User.objects.get(username = username2)
+
+        try:
+            periodo = Periodo.objects.get(predeterminado = True)
+        except Periodo.DoesNotExist:
+            año = datetime.now().year
+            mes = datetime.now().month
+            if mes >= 1 and mes <= 6:
+                nombre = str(año)+' - '+ '1'
+                fecha_inicio = str(datetime.strptime(str(año)+'-02-25','%Y-%m-%d').date())
+                fecha_termino = str(datetime.strptime(str(año)+'-07-04','%Y-%m-%d').date())
+            else:
+                nombre = str(año)+' - '+ '2'
+                fecha_inicio = str(datetime.strptime(str(año)+'-07-05','%Y-%m-%d').date())
+                fecha_termino = str(datetime.strptime(str(año)+'-12-20','%Y-%m-%d').date())
+
+            Periodo.objects.create(nombre = nombre,
+                                fecha_inicio = fecha_inicio,
+                                fecha_fin = fecha_termino,
+                                predeterminado = True
+                                )
         
         user = authenticate(
             request, username=username2, password=password2)
@@ -661,36 +710,49 @@ def registrarAsistencia(request,id_user,id_periodo,id_curso):
 #-------------- CLASES ----------------
 #--------------------------------------
 
-def listaCursosClases(request,id_user,id_periodo):
-    curso = Curso.objects.filter(periodo_id = id_periodo)
+def horarioPorCurso(request, id_user, id_periodo, id_curso):
+    curso = Curso.objects.get(pk = id_curso)
+    periodo = Periodo.objects.get(pk = id_periodo)
+    cursosOpcion = Curso.objects.filter(periodo_id = periodo.id)
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
-    return render(request, 'listaCursosClases.html',{'id':id_user,
+    asignaturas = Asignatura.objects.filter(curso_id = curso.id)
+
+    if request.method == 'GET':
+        form = crearClase()
+
+        dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes']
+        horas = ['08:00', '08:45', '09:30', '10:15', '11:00', '11:45', '12:30', '13:15', '14:00', '14:45', '15:30', '16:15']
+        
+        clases = Clase.objects.filter(curso_id = id_curso, periodo_id = id_periodo)
+        calendario = {dia: {hora: None for hora in horas} for dia in dias}
+        
+        for clase in clases:
+            calendario[clase.dia][clase.hora] = clase
+
+        return render(request, 'verHorarioCurso.html',{'curso':curso,
+                                                    'periodo':periodo,
                                                     'perfil':perfil,
                                                     'gruop':gruop,
-                                                    'curso':curso})
-
-def clasesCurso(request,id_user, id_periodo,id_curso):
-    perfil = User.objects.get(pk = id_user)
-    gruop = Group.objects.get(pk = perfil.groups_id)
-    clases = Clase.objects.filter(curso_id = id_curso, periodo_id = id_periodo)
-    curso = Curso.objects.get(id = id_curso)
-    return render(request,'clasesCurso.html',{'clases':clases,
-                                              'curso':curso,
-                                              'periodo':id_periodo,
-                                              'id':id_user,
-                                              'perfil':perfil,
-                                              'gruop':gruop})
-
-def registrarClase(request,id_user,id_periodo,id_curso):
-    perfil = User.objects.get(pk = id_user)
-    gruop = Group.objects.get(pk = perfil.groups_id)
-    if request.method == 'GET':
-        return render(request,'registrarClase.html',{'perfil':perfil,
-                                                    'gruop':gruop})
+                                                    'cursos':cursosOpcion,
+                                                    'calendario':calendario,
+                                                    'dias':dias,
+                                                    'horas':horas,
+                                                    'clase':calendario,
+                                                    'form':form,
+                                                    'asignaturas':asignaturas})
     else:
-        return redirect('clasesCurso')
+        asignatura = Asignatura.objects.get(pk = request.POST["asignatura"])
+        diaClase = request.POST["dia"]
+        horaClase = request.POST["hora"]
 
+        Clase.objects.create(nombre = asignatura.nombre,
+                             asignatura_id = asignatura.id,
+                             curso_id = curso.id,
+                             periodo_id = periodo.id,
+                             dia = diaClase,
+                             hora = horaClase)
+        return redirect('horarioCurso',perfil.id, periodo.id, curso.id)
 
 #------------------------------
 #--------- PERFILES -----------
@@ -770,6 +832,9 @@ def perfil(request, id_estudiante):
     asignaturas = Asignatura.objects.filter(curso_id = curso.id)
     notas = mostrarNotas(estudiante.id, asignaturas, curso.id, periodo.id)
     promedio = mostrarPromedios(estudiante.id, asignaturas, curso.id, periodo.id)
+    if promedio == {}:
+        promedio = None
+    
     promedio_global = promedioGeneral(estudiante.id, asignaturas, curso.id, periodo.id)
     promedio_globalConComilla = str(promedio_global)[:1] + "," + str(promedio_global)[1:2]
     return render(request,
@@ -779,7 +844,9 @@ def perfil(request, id_estudiante):
                     'asignaturas': asignaturas,
                     'notas': notas,
                     'promedios':promedio,
-                    'promedioGeneral':promedio_globalConComilla
+                    'promedioGeneral':promedio_globalConComilla,
+                    'periodo':periodo,
+                    'promedio_global':promedio_global
                     })
 
 def asistencia(request, id_estudiante):
@@ -805,11 +872,33 @@ def asistencia(request, id_estudiante):
                                               'inasistencias':inasistencias})
 
 def perfil_ri(request, id_user):
-    periodo = Periodo.objects.get(predeterminado = True)
+    try:
+        periodo = Periodo.objects.get(predeterminado = True)
+    except Periodo.DoesNotExist:
+        if datetime.now().month >= 1 and datetime.now().month <= 6:
+            nombre = str(datetime.now().year)+' - '+ '1'
+            fecha_inicio = str(datetime.strptime('25/02/'+str(datetime.now().year,'%d-%m-%y')))
+            fecha_termino = str(datetime.strptime('04/07/'+str(datetime.now().year,'%d-%m-%y')))
+        else:
+            nombre = str(datetime.now().year)+' - '+ '2'
+            fecha_inicio = str(datetime.strptime('05/07/'+str(datetime.now().year,'%d-%m-%y')))
+            fecha_termino = str(datetime.strptime('20/12/'+str(datetime.now().year,'%d-%m-%y')))
+
+        Periodo.objects.create(nombre = nombre,
+                               fecha_inicio = fecha_inicio,
+                               fecha_termino = fecha_termino,
+                               predeterminado = True
+                               )
+        print("periodo creado con exito")
+        
     perfil = User.objects.get(pk = id_user)
     gruop = Group.objects.get(pk = perfil.groups_id)
+    cursos = Curso.objects.filter(periodo_id = periodo.id)
+    if cursos.count() == 0 :
+        cursos = None
     return render(request,'perfil_ri.html',{'periodo':periodo,
                                             'id':id_user,
                                             'perfil':perfil,
-                                            'gruop':gruop})
+                                            'gruop':gruop,
+                                            'cursos':cursos})
     

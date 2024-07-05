@@ -29,8 +29,9 @@ urlpatterns = [
     path('<int:id_user>/Periodo<int:id_periodo>/Curso<int:id_curso>/RegistroAsistencia', views.registrarAsistencia, name = "asistencia"),
     path('<int:id_user>/Curso<int:id_curso>/<str:fecha_asistencia>/RegistroAsistencia', views.listaAsistencia, name = "listaAsistencia"),
 
-    path('<int:id_user>/Periodo<int:id_periodo>/Clases/', views.listaCursosClases, name='listaCursosClases'),
-    path('<int:id_user>/Periodo<int:id_periodo>/Clases/Curso<int:id_curso>', views.clasesCurso, name='clasesCurso'),
+
+    path('<int:id_user>/Periodo<int:id_periodo>/Curso<int:id_curso>/Clases', views.horarioPorCurso, name = "horarioCurso"),
+
     
     path('<int:id_user>/Periodo<int:id_periodo>/Cursos/', views.cursos, name='cursos'),
     path('<int:id_user>/Cursos/Curso<int:curso_id>/Periodo<int:id_periodo>', views.editarCursos, name='editarCursos'),

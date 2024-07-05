@@ -95,15 +95,19 @@
             </section>
             <section>
                 <ul id="asignaturas">
+                    {% if promedios is not none%}
                     {% for a in asignaturas %}
                     <li style="text-transform: capitalize;">
                         {{a.nombre}}
                     </li>
                     {% endfor %}
+                    {% else %}
+                    <h1>Aun no tienes asignaturas disponibles</h1>
+                    {% endif %}
                 </ul>
                 <ul id="notas">
                     {% for a in asignaturas %}
-                    {% if promedios %}
+                    {% if promedios%}
                     {% for promedio in promedios|get_item:a.id %}
                     <li>
                         {{ promedio|default_if_none:'' }}
@@ -115,25 +119,27 @@
             </section>
         </div>
         <div class="card">
-            <h3>Promedio General</h3>
+            <h2>Promedio General</h2>
+            {% if promedio_global is not none%}
             <span class="promedio">{{promedioGeneral}}</span>
+            {% else %}
+            <h1>Aun no tienes notas disponibles</h1>
+            {% endif %}
         </div>
         {% for a in asignaturas %}
         <div class="card">
             <h3 style="text-transform: capitalize;">{{a.nombre}}</h3>
-            <ul>
-                {% if notas|default_if_none:'' %}
+            <div class="notas">
+                {% if notas|get_item:a.id is not none %}
                 {% for nota in notas|get_item:a.id %}
-                {% if nota is not none %}
-                <li>
-                    {{ nota }}
-                </li>
-                {% else %}
-                <h1>hola</h1>
-                {% endif %}
+                <span class="objeto">
+                    <h4>Nota {{forloop.counter}}:</h4><span class="nota">{{ nota }}</span>
+                </span>
                 {% endfor %}
+                {% else %}
+                <h1>Aun no tienes notas disponibles</h1>
                 {% endif %}
-            </ul>
+            </div>
         </div>
         {% endfor %}
     </content>

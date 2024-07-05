@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Curso, User, Periodo, Asignatura
+from .models import Curso, User, Periodo, Asignatura, Clase
 from django.contrib.auth.models import Group
 
 class crearCurso(forms.ModelForm):
@@ -40,3 +40,8 @@ class crearAsignatura(forms.ModelForm):
     class Meta:
         model = Asignatura
         fields = ('nombre',)
+
+class crearClase(forms.ModelForm):
+    class Meta:
+        model = Clase
+        fields = '__all__'

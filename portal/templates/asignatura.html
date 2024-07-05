@@ -106,6 +106,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if contador is not none %}
                         {% for a in asignatura %}
                         <tr>
                             <td><a href="" id="materia" style="cursor: default; text-transform: capitalize;">{{a.nombre}}</a></td>
@@ -118,6 +119,13 @@
                             </td>
                         </tr>
                         {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td>
+                                <h1 style="opacity: .5; font-size: 40px;">Aun no tienes Asignaturas</h1>
+                            </td>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
