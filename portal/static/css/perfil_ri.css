@@ -378,3 +378,118 @@ dialog::backdrop{
         margin: 0;
     }
 }
+
+@media (max-width: 1000px){
+    aside{
+        display: none;
+        position: fixed;
+        right: 0;
+        min-height: 100dvh;
+        z-index: 100;
+        img{
+            width: 160px;
+            height: 20px;
+            justify-self: center;
+        }
+        span{
+            font-size: 6vw;
+        }
+
+        .lista{
+            font-size: 30px;
+            gap: 10px;
+        }
+        .dropdown{
+            .items{
+                width: 200px;
+            }
+        }
+    }
+
+    body {
+        grid-template-columns: 1fr 5fr 1fr;
+        grid-template-rows: 50px 1fr;
+        grid-template-areas: ". . ."
+                             ". content .";
+        background: linear-gradient(to right, #cfd5d8, #768a9c);
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+    }
+    
+    header{
+        z-index: 10;
+        width: 100%;
+        top: 0;
+        padding: 5px 10px;
+        position: fixed;
+        display: grid;
+        grid-template-columns: 10vw 1fr 10vw;
+        grid-template-areas: "img info hamburger";
+        h2{
+            display: none;
+        }
+        .bloque{
+            display: none;
+        }
+        img{
+            grid-area: img;
+        }
+        .hamburger{
+            grid-area: hamburger;
+            display: flex;
+            background-color: white;
+            border-radius: 5px;
+            height: min-content;
+            width: min-content;
+            justify-content: center;
+            align-items: center;
+            svg{
+                height: 12vw;
+                width: 12vw;
+            }
+        }
+    }
+
+    content{
+        grid-area: content;
+        position: relative;
+        background: none;
+        display:flex;
+        flex-direction: column;
+        grid-area: content;
+        padding: 0;
+        margin-top: 10vw;
+
+        .card{
+            width: 100%;
+            grid-template-columns: min-content 1fr;
+            grid-template-rows: min-content 1fr;
+            grid-template-areas: "svg h3"
+                       "descripcion descripcion";
+            padding: 20px;
+            gap: 15px;
+            .fondo_logo{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 10vw;
+                width: 10vw;
+                svg{
+                    height: 7vw;
+                    width: 7vw;
+                    margin: 0;
+                }
+            }
+            h3{
+                font-size: 8vw;
+            }
+            p{
+                font-size: 4vw;
+            }
+        }
+    }
+
+    aside.active {
+        display: grid;
+    }
+}

@@ -11,6 +11,18 @@
     
 </head>
 <body>
+    <div class="hamburger" id="toggleAside">
+        <svg
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 6h16M4 12h16M4 18h16" 
+        stroke="#000" 
+        stroke-width="2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+        </svg>
+    </div>
     <header>
         <div class="links">
         {%block links%}
@@ -29,7 +41,7 @@
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>
 
-    <aside>
+    <aside id="nav">
         <img src="{% static 'img/logotop.jpg' %}" alt="">
         <span><strong>Mineduc</strong> Portal</span>
         <div class="bloque">
@@ -98,7 +110,7 @@
     <content>
 
         <div class="botonera">
-            <button type="submit" id="abrirPopup"><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>Registrar Clase</button>
+            <button id="abrirPopup"><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="white" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>Registrar Clase</button>
             <p class="titulo" style="text-transform: capitalize;">{{periodo.nombre}}</p><p class="titulo" style="text-transform: capitalize;">{{curso.nombre}}</p>
         </div>
         <div class="card">
@@ -120,7 +132,14 @@
                                     <td>
                                         {% with clase|get_item:dia|get_item:hora as clase_actual %}
                                             {% if clase_actual %}
-                                                <span class="conRamo">{{ clase_actual.nombre }}</span>
+                                                <span class="conRamo">{{ clase_actual.nombre }} 
+                                                    <a href="{% url 'eliminarClase' perfil.id clase_actual.id periodo.id curso.id %}" class="x">
+                                                        <svg
+                                                            viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.7929 7.49998L1.14645 1.85353L1.85356 1.14642L7.50001 6.79287L13.1465 1.14642L13.8536 1.85353L8.20711 7.49998L13.8536 13.1464L13.1465 13.8535L7.50001 8.20708L1.85356 13.8535L1.14645 13.1464L6.7929 7.49998Z" />
+                                                        </svg>
+                                                    </a>
+                                                </span>
                                             {% else %}
                                                 <span class="sinRamo">Libre</span>
                                             {% endif %}
@@ -139,9 +158,9 @@
             <form method="POST">
                 {% csrf_token %}
                 <label>Asignatura:
-                    <select name="asignatura" id="asignatura">
+                    <select name="asignatura" id="asignatura" style="text-transform: capitalize;">
                         {% for asignatura in asignaturas %}
-                        <option value="{{ asignatura.id }}">{{ asignatura.nombre }}</option>
+                        <option value="{{ asignatura.id }}" style="text-transform: capitalize;">{{ asignatura.nombre }}</option>
                         {% endfor %}
                     </select>
                 </label>
@@ -159,11 +178,83 @@
                         {% endfor %}
                     </select>
                 </label>
-                <button type="submit">hola mundo</button>
+                <button type="submit">Registrar Clase</button>
             </form>
         </dialog>
+
+        <div class="infoCurso">
+            <p class="titulo">{{ periodo.nombre }}</p><p class="titulo">{{ curso.nombre }}</p>
+        </div>
+        <div class="dias-botones">
+            {% for dia in dias %}
+                <button class="dia-btn" onclick="mostrarClases('{{ dia }}')">{{ dia|make_list|first }}</button>
+            {% endfor %}
+        </div>
+        
+        
+        <button id="abrirPopup2" class="pop">
+            <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" 
+                    stroke-width="0">
+                </g>
+                <g id="SVGRepo_tracerCarrier" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round">
+                </g>
+                <g id="SVGRepo_iconCarrier"> 
+                <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" 
+                    stroke="white" 
+                    stroke-width="1.5" 
+                    stroke-linecap="round">
+                </path> 
+                <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" 
+                    stroke="white" 
+                    stroke-width="1.5" 
+                    stroke-linecap="round">
+                </path> 
+                </g>
+            </svg>
+        </button>
+        
+        <div class="clases-container">
+            {% for dia in dias %}
+                <div id="clases-{{ dia }}" class="tabla" style="display: flex; flex-direction: column;">
+                    <div class="header">{{ dia }}</div>
+                    {% for hora in horas %}
+                        <div class="fila">
+                            <div class="hora">{{ hora }}</div>
+                            <div>
+                                {% with clase|get_item:dia|get_item:hora as clase_actual %}
+                                    {% if clase_actual %}
+                                    <span class="conRamo">{{ clase_actual.nombre }} 
+                                        <a href="{% url 'eliminarClase' perfil.id clase_actual.id periodo.id curso.id %}" class="x">
+                                            <svg
+                                                viewBox="0 0 15 15" 
+                                                fill="none" 
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" 
+                                                clip-rule="evenodd" 
+                                                d="M6.7929 7.49998L1.14645 1.85353L1.85356 1.14642L7.50001 6.79287L13.1465 1.14642L13.8536 1.85353L8.20711 7.49998L13.8536 13.1464L13.1465 13.8535L7.50001 8.20708L1.85356 13.8535L1.14645 13.1464L6.7929 7.49998Z" />
+                                            </svg>
+                                        </a>
+                                    </span>
+                                    {% else %}
+                                    <span class="sinRamo">Libre</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
     </content>
 <script src="{% static 'js/dialog.js' %}"></script>
 <script src="{% static 'js/hover.js' %}"></script>
+<script src="{% static 'js/navbarOpen.js' %}"></script>
+<script src="{% static 'js/cambiarDias.js' %}"></script>
 </body>
 </html>

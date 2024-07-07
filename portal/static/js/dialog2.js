@@ -1,11 +1,6 @@
-var abrirPopup2 = document.getElementById("abrirPopup2")
 var abrirPopup = document.getElementById("abrirPopup")
 var cerrarPopup = document.getElementById("cerrarPopup")
 var dialog = document.getElementById("popup")
-
-abrirPopup2.addEventListener("click", function(){
-  dialog.showModal()
-})
 
 abrirPopup.addEventListener("click", function(){
     dialog.showModal()

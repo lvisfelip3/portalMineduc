@@ -3,7 +3,7 @@
 <head>
     {% load static %}
     {% load filters %}
-    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <link rel="stylesheet" href="{% static 'css/horario.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>perfil</title>
@@ -13,7 +13,7 @@
 <body>
     <header>
         {% block links %}
-        <h2>Notas</h2>
+        <h2>Asistencia</h2>
         {% endblock %}
         <div class="bloque">
             <a href="#">{{estudiante.first_name}} {{estudiante.last_name}}</a>
@@ -89,60 +89,40 @@
     {% block content %}
     <content>
         <div class="card">
-            <section>
-            <h3 style="text-transform: capitalize;">{{curso.nombre}}</h3>
-            <span>Promedios</span>
-            </section>
-            <section>
-                <ul id="asignaturas">
-                    {% if promedios is not none%}
-                    {% for a in asignaturas %}
-                    <li style="text-transform: capitalize;">
-                        {{a.nombre}}
-                    </li>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for dia in dias %}
+                            <th>{{ dia }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hora in horas %}
+                        <tr>
+                            <div class="linea">
+                                <td class="hora">{{ hora }}</td>
+                                {% for dia in dias %}
+                                    <td>
+                                        {% with clase|get_item:dia|get_item:hora as clase_actual %}
+                                            {% if clase_actual %}
+                                                <span class="conRamo">{{ clase_actual.nombre }}
+                                                </span>
+                                            {% else %}
+                                                <span class="sinRamo">Libre</span>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </td>
+                                {% endfor %}
+                            </div>
+                        </tr>
                     {% endfor %}
-                    {% else %}
-                    <h1>Aun no tienes asignaturas disponibles</h1>
-                    {% endif %}
-                </ul>
-                <ul id="notas">
-                    {% for a in asignaturas %}
-                    {% if promedios%}
-                    {% for promedio in promedios|get_item:a.id %}
-                    <li>
-                        {{ promedio|default_if_none:'' }}
-                    </li>
-                    {% endfor %}
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            </section>
+                </tbody>
+            </table>
         </div>
-        <div class="card">
-            <h2>Promedio General</h2>
-            {% if promedio_global is not none%}
-            <span class="promedio">{{promedioGeneral}}</span>
-            {% else %}
-            <h1>Aun no tienes notas disponibles</h1>
-            {% endif %}
-        </div>
-        {% for a in asignaturas %}
-        <div class="card">
-            <h3 style="text-transform: capitalize;">{{a.nombre}}</h3>
-            <div class="notas">
-                {% if notas|get_item:a.id is not none %}
-                {% for nota in notas|get_item:a.id %}
-                <span class="objeto">
-                    <h4>Nota {{forloop.counter}}:</h4><span class="nota">{{ nota }}</span>
-                </span>
-                {% endfor %}
-                {% else %}
-                <h1>Aun no tienes notas disponibles</h1>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
     </content>
     {% endblock %}
+<script src="{% static 'js/hover.js' %}"></script>
 </body>
 </html>

@@ -14,6 +14,7 @@ urlpatterns = [
     #----------------------------------------------
     path('Estudiante<int:id_estudiante>/Notas', views.perfil, name="perfil"),
     path('Estudiante<int:id_estudiante>/Asistencia', views.asistencia, name="Easistencia"),
+    path('Estudiante<int:id_estudiante>/Horario', views.horario, name="horario"),
     #--------------------------------------------------
     #--------------- ADMIN Y DOCENTE-------------------
     #--------------------------------------------------
@@ -31,6 +32,7 @@ urlpatterns = [
 
 
     path('<int:id_user>/Periodo<int:id_periodo>/Curso<int:id_curso>/Clases', views.horarioPorCurso, name = "horarioCurso"),
+    path('<int:id_user>/Clase<int:id_clase>/Periodo<int:id_periodo>/Curso<int:id_curso>/Clase/Eliminar', views.eliminarClase, name = "eliminarClase"),
 
     
     path('<int:id_user>/Periodo<int:id_periodo>/Cursos/', views.cursos, name='cursos'),

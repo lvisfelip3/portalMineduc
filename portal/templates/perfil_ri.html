@@ -10,6 +10,18 @@
 </head>
 <body>
     <header>
+        <div class="hamburger" id="toggleAside">
+            <svg
+            viewBox="0 0 24 24" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6h16M4 12h16M4 18h16" 
+            stroke="#000" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"/>
+            </svg>
+        </div>
         <h2>Académico</h2>
         <div class="bloque">
             <a href="#">{{perfil.first_name}} {{perfil.last_name}}</a>
@@ -19,7 +31,7 @@
         <img src="{% static 'img/profilePicture.webp' %}" alt="">
     </header>
 
-    <aside>
+    <aside id="nav">
         <img src="{% static 'img/logotop.jpg' %}" alt="">
         <span><strong>Mineduc</strong> Portal</span>
         <div class="bloque">
@@ -135,7 +147,8 @@
         {% endif %}
     </content>
     {% if perfil.groups_id == 3 %}
-    <script src="{% static 'js/dialog.js' %}"></script>
+    <script src="{% static 'js/dialog2.js' %}"></script>
+    <script src="{% static 'js/navbarOpen.js' %}"></script>
     {% endif %}
 </body>
 </html>

@@ -3,5 +3,6 @@
     "cSpell.language": "en",
     "cSpell.enableFiletypes": [
         "!html"
-    ]
+    ],
+    "terminal.integrated.gpuAcceleration": "on"
 }

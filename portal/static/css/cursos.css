@@ -419,6 +419,21 @@ dialog button:hover{
     padding: 30px;
     margin: 0;
 }
+
+.hamburger{
+    display: none;
+}
+
+.datos{
+    display: none;
+}
+
+.cardMobile{
+    display: none;
+}
+.pop{
+    display: none;
+}
 @media (max-width: 1500px){
 
     body {
@@ -488,5 +503,174 @@ dialog button:hover{
     content .card {
         margin: 10px 70px 20px 70px;
         
+    }
+}
+
+@media (max-width: 1000px){
+    aside{
+        display: none;
+        position: fixed;
+        right: 0;
+        min-height: 100dvh;
+        z-index: 100;
+        img{
+            width: 160px;
+            height: 20px;
+            justify-self: center;
+        }
+        span{
+            font-size: 6vw;
+        }
+
+        .lista{
+            font-size: 30px;
+            gap: 10px;
+        }
+        .dropdown{
+            .items{
+                width: 200px;
+            }
+        }
+    }
+
+    body {
+        grid-template-columns: 1fr 5fr 1fr;
+        grid-template-rows: 50px 1fr;
+        grid-template-areas: ". . ."
+                             ". content .";
+        background: linear-gradient(to right, #cfd5d8, #768a9c);
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+    }
+    
+    header{
+        z-index: 10;
+        width: 100%;
+        top: 0;
+        padding: 5px 10px;
+        position: fixed;
+        display: grid;
+        grid-template-columns: 10vw 1fr 10vw;
+        grid-template-areas: "img info hamburger";
+        h2{
+            display: none;
+        }
+        .datos{
+            grid-area: info;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5vw;
+            font-weight: 600;
+        }
+        .bloque{
+            display: none;
+        }
+        img{
+            grid-area: img;
+        }
+        .hamburger{
+            grid-area: hamburger;
+            display: flex;
+            background-color: white;
+            border-radius: 5px;
+            height: min-content;
+            width: min-content;
+            justify-content: center;
+            align-items: center;
+            svg{
+                height: 12vw;
+                width: 12vw;
+            }
+        }
+    }
+
+    content{
+        grid-area: content;
+        position: relative;
+        background: none;
+        display:flex;
+        flex-direction: column;
+        grid-area: content;
+        padding: 0;
+        margin-top: 10vw;
+
+        .card{
+            display: none;
+        }
+        .cardMobile{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+            transition: 200ms all;
+            details{
+                background-color: rgb(230, 230, 230);
+                border-radius: 8px;
+                transition: 200ms all;
+                display: flex;
+                .nombre{
+                    display: flex;
+                    justify-content: space-between;
+                    width: 100%;
+                    background-color: whitesmoke;
+                    font-size: 5vw;
+                    padding: 10px;
+                    border-radius: 8px;
+                    span{
+                        background-color: #7d6fce;
+                        border-radius: 5px;
+                        padding: 2px 7px;
+                        color: white;
+                    }
+                }
+                .opciones{
+                    display: flex;
+                    width: 100%;
+                    padding: 10px;
+                    justify-content: space-between;
+                    a{
+                        text-decoration: none;
+                        font-size: 4vw;
+                        border-radius: 3px;
+                        color: white;
+                        padding: 10px;
+                        &:first-child{
+                            background-color: #222a30;
+                        }
+                        &:nth-child(2){
+                            background-color: #008f37;
+                        }
+                        &:last-child{
+                            background-color: #9c0141;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    aside.active {
+        display: grid;
+    }
+    .pop{
+        display: flex;
+        position: fixed;
+        top: 12vw;
+        right: 5px;
+        background-color: #222a30;
+        border-radius: 5px;
+        margin: 20px 0 0 0;
+        padding: 10px;
+        border: none;
+        height: min-content;
+        width: min-content;
+        svg{
+            height: 8vw;
+            width: 8vw;
+        }
+        &:hover{
+            background-color: #4b4da5;
+        }
     }
 }
