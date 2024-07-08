@@ -18,11 +18,13 @@ def login(request):
 
 def index(request):
     try:
-        Group.objects.all()
+        Group.objects.get(pk=1)
+        return redirect('signin')
     except Group.DoesNotExist:
-        Group.objects.create(nombre = 'Estudiante')
-        Group.objects.create(nombre = 'Docente')
-        Group.objects.create(nombre = 'Responsable Institucional')
+        Group.objects.create(name = 'Estudiante')
+        Group.objects.create(name = 'Docente')
+        Group.objects.create(name = 'Responsable Institucional')
+        print("grupos creados con exito")
         try:
             User.objects.get(groups_id = 3)
         except User.DoesNotExist:
@@ -37,7 +39,7 @@ def index(request):
                                     password = 'PortalMineduc123'
                                     )
             print("Usuario creado con exito")
-        return render(request,'index.html')
+            return redirect('index')
 #-----------------------------
 #--------- PERIODO -----------
 #-----------------------------
@@ -504,7 +506,7 @@ def signupEstudiante(request,id_user):
                     age = datetime.now().year - año.year
                     cursoId = request.POST["curso"]
                     if request.POST["curso"] == 0:
-                        cursoId = None
+                        cursoId = ''
                     print(cursoId)
                     user = User.objects.create_user( username = username, 
                                                     password=request.POST["password1"],
