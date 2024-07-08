@@ -205,6 +205,10 @@ table td{
     font-size: 30px;
 }
 
+.logo{
+    display: none;
+}
+
 .card td .opcion{
     height: 40px;
     width: 95px;
@@ -434,6 +438,15 @@ dialog button:hover{
 .pop{
     display: none;
 }
+
+.goBack{
+    display: none;
+}
+
+.footerNav{
+    display: none;
+}
+
 @media (max-width: 1500px){
 
     body {
@@ -552,6 +565,13 @@ dialog button:hover{
         display: grid;
         grid-template-columns: 10vw 1fr 10vw;
         grid-template-areas: "img info hamburger";
+        img{
+            display: none;
+        }
+        .logo{
+            grid-area: img;
+            display: block;
+        }
         h2{
             display: none;
         }
@@ -562,12 +582,17 @@ dialog button:hover{
             align-items: center;
             font-size: 5vw;
             font-weight: 600;
+            gap: 10px;
+            p{
+                margin: 0;
+                background-color: #7d67ff;
+                color:white;
+                border-radius: 5px;
+                padding: 5px;
+            };
         }
         .bloque{
             display: none;
-        }
-        img{
-            grid-area: img;
         }
         .hamburger{
             grid-area: hamburger;
@@ -604,6 +629,17 @@ dialog button:hover{
             width: 100%;
             gap: 10px;
             transition: 200ms all;
+
+            .noAsistencia{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 8px;
+                background-color: white;
+                padding: 10px;
+                font-size: 5vw;
+            }
             details{
                 background-color: rgb(230, 230, 230);
                 border-radius: 8px;
@@ -635,6 +671,7 @@ dialog button:hover{
                         border-radius: 3px;
                         color: white;
                         padding: 10px;
+                        font-weight: 600;
                         &:first-child{
                             background-color: #222a30;
                         }
@@ -645,6 +682,58 @@ dialog button:hover{
                             background-color: #9c0141;
                         }
                     }
+                }
+            }
+            .listaCursos{
+                width: 100%;
+                background-color: white;
+                padding: 10px;
+                text-decoration: none;
+                color: #1d1d1d;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 5vw;
+                font-weight: 500;
+                border-radius: 8px;
+                span{
+                    background-color: #7d6fce;
+                    color: white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    font-weight: 600;
+                }
+            }
+            .registroAsistencia{
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                .fecha{
+                    width: 100%;
+                    background-color: #593cff;
+                    color: white;
+                    font-size: 5vw;
+                    padding: 10px;
+                    text-transform: capitalize;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-weight: 600;
+                    border-radius: 5px;
+                    position: sticky;
+                    top: 0;
+                }
+                .est{
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 10px 20px;
+                    background-color: white;
+                    width: 100%;
+                    align-items: center;
+                    font-size: 4vw;
+                    text-transform: capitalize;
+                    font-weight: 400;
+                    border-radius: 5px;
                 }
             }
         }
@@ -660,17 +749,69 @@ dialog button:hover{
         right: 5px;
         background-color: #222a30;
         border-radius: 5px;
-        margin: 20px 0 0 0;
+        margin: 30px 0 0 0;
         padding: 10px;
         border: none;
         height: min-content;
         width: min-content;
         svg{
-            height: 8vw;
-            width: 8vw;
+            height: 7vw;
+            width: 7vw;
         }
         &:hover{
             background-color: #4b4da5;
+        }
+    }
+
+    .goBack{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #222a30;
+        border-radius: 5px;
+        position: fixed;
+        top: 12vw;
+        left: 5px;
+        height: min-content;
+        width: min-content;
+        padding: 10px;
+        margin-top: 30px;
+        svg{
+            height: 7vw;
+            width: 7vw;
+            fill: white;
+        }
+    }
+
+    .footerNav{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        .footeritem{
+            img{
+                height: 7vw;
+                width: 7vw;
+            }
+            .footerIcon{
+                height: 7vw;
+                width: 7vw;
+                color: black;
+                path, g{
+                    fill: black;
+                }
+            }
+            &:nth-child(4){
+                fill: black;
+                path{
+                    fill: none;
+                    stroke: black;
+                }
+            }
         }
     }
 }

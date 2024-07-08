@@ -151,25 +151,161 @@ content{
     grid-area: content;
     background: linear-gradient(to right, #cfd5d8, #768a9c);
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 80px;
+    align-items: center;
     padding:50px 100px 50px 100px;
 }
 
 .card {
     background-color: #FDFBF6;
     border-radius: 15px;
-    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    transition: transform .1s;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
     box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
     position: relative;
+    form{
+        display: grid;
+        grid-template-columns: 1fr 500px;
+        grid-template-rows: min-content min-content;
+        grid-template-areas: "form img"
+                            "form2 button";
+        label{
+            font-size: 20px;
+        }
+        input{
+            width: 100%;
+            background-color: #dedede;
+            border: none;
+            border-radius: 50rem;
+            height: 30px;
+            padding: 2px 10px;
+            font-size: 90%;
+            display: block;
+        }
+    }
+    .personal{
+        grid-area: form;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .foto{
+        grid-area: img;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: flex-start;
+        align-items: center;
+        span{
+            font-size: 20px;
+            text-align: center;
+        }
+        .drag.dragover {
+            border-color: #000;
+            background-color: #b3a9ec;
+        }
+        .drag{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            gap: 10px;
+            height: 250px;
+            width: 250px;
+            border-radius: 50rem;
+            outline: 2px dashed #555;
+            color: #444;
+            cursor: pointer;
+            transition: 200ms ease-in-out;
+            &:hover{
+                background-color: #eee;
+                border-color: #111;
+                i{
+                    background-color: #664BFE;
+                }
+            }
+            i{
+                background-color: #3C3C3C;
+                color: white;
+                font-style: normal;
+                padding: 5px;
+                border-radius: 8px;
+                transition: 100ms all;
+            }
+            input[type='file']{
+                display: none;
+            }
+            span{
+                text-align: center;
+            }
+            img{
+                width: 100%;
+                height: 100%;
+                border-radius: 50rem;
+                position: absolute;
+                object-fit: cover;
+            }
+        }
+    }
+
+    .credencial{
+        grid-area: form2;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+    .botones{
+        grid-area: button;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        select{
+            border: 0;
+            outline: 1px solid #ccc;
+            height: 30px;
+            width: 70%;
+            border-radius: 5px;
+        }
+        button{
+            font-size: 25px;
+            padding: 20px;
+            background-color: #222a30;
+            color: white;
+            border-radius: 8px;
+            transition: 100ms all;
+            border: 0;
+            &:hover{
+                background-color: #6d53fd;
+                transform: scale(105%);
+            }
+        }
+    }
 }
 
+
 .helptext{
+    display: none;
+}
+
+.footerNav{
+    display: none;
+}
+
+.logo{
     display: none;
 }
 

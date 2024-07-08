@@ -180,6 +180,7 @@ content{
         font-size: 35px;
         margin: 0;
         cursor: default;
+        text-align: center;
     }
     span{
         font-size: 100px;
@@ -210,8 +211,21 @@ content{
     grid-area: inasistencias;
 }
 
+.logo{
+    display: none;
+}
 
+.datos{
+    display: none;
+}
 
+.hamburger{
+    display: none;
+}
+
+.footerNav{
+    display: none;
+}
 @media (max-width: 1500px){
 
     content{
@@ -290,5 +304,201 @@ content{
         color: black;
         display: block;
         margin: 3px;
+    }
+}
+
+@media (max-width: 1000px){
+    aside{
+        display: none;
+        position: fixed;
+        right: 0;
+        min-height: 100dvh;
+        z-index: 100;
+        img{
+            width: 160px;
+            height: 20px;
+            justify-self: center;
+        }
+        span{
+            font-size: 6vw;
+        }
+
+        .lista{
+            font-size: 30px;
+            gap: 10px;
+        }
+        .dropdown{
+            .items{
+                width: 200px;
+            }
+        }
+        .bloque:last-child{
+            margin-bottom: 50px;
+        }
+    }
+
+    body {
+        grid-template-columns: 1fr 5fr 1fr;
+        grid-template-rows: 50px 1fr;
+        grid-template-areas: ". . ."
+                             ". content .";
+        background: linear-gradient(90deg, rgba(103,97,242,1) 0%, rgba(241,81,81,1) 100%);
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+        overflow-y: auto;
+        position: relative;
+    }
+    
+    header{
+        z-index: 10;
+        width: 100%;
+        top: 0;
+        padding: 5px 10px;
+        position: fixed;
+        display: grid;
+        grid-template-columns: 10vw 1fr 10vw;
+        grid-template-areas: "img info hamburger";
+        img{
+            display: none;
+        }
+        .logo{
+            grid-area: img;
+            display: block;
+        }
+        h2{
+            display: none;
+        }
+        .datos{
+            grid-area: info;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5vw;
+            font-weight: 600;
+            gap: 10px;
+            p{
+                margin: 0;
+                background-color: #7d67ff;
+                color:white;
+                border-radius: 5px;
+                padding: 5px;
+            };
+        }
+        .bloque{
+            display: none;
+        }
+        .hamburger{
+            grid-area: hamburger;
+            display: flex;
+            background-color: white;
+            border-radius: 5px;
+            height: min-content;
+            width: min-content;
+            justify-content: center;
+            align-items: center;
+            svg{
+                height: 12vw;
+                width: 12vw;
+            }
+        }
+    }
+
+    content{
+        grid-area: content;
+        background: none;
+        display:flex;
+        flex-direction: column;
+        margin-top: 8vw;
+        overflow-y: visible;
+        height: min-content;
+        padding: 0 0 40px 0;
+
+        .card{
+            display: grid;
+            grid-template-columns: 1fr 13vw;
+            width: 100%;
+            padding: 10px;
+            padding: 10px;
+            justify-items: start;
+            h2{
+                display: flex;
+                font-size: 3vw;
+                padding: 10px;
+                text-align: start;
+            }
+            span{
+                font-size: 5.5vw;
+                justify-self: center;
+            }
+        }
+    }
+
+    aside.active {
+        display: grid;
+    }
+    .pop{
+        display: flex;
+        position: fixed;
+        top: 12vw;
+        right: 5px;
+        background-color: #222a30;
+        border-radius: 5px;
+        margin: 30px 0 0 0;
+        padding: 10px;
+        border: none;
+        height: min-content;
+        width: min-content;
+        svg{
+            height: 7vw;
+            width: 7vw;
+        }
+        &:hover{
+            background-color: #4b4da5;
+        }
+    }
+
+    .goBack{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #222a30;
+        border-radius: 5px;
+        position: fixed;
+        top: 12vw;
+        left: 5px;
+        height: min-content;
+        width: min-content;
+        padding: 10px;
+        margin-top: 30px;
+        svg{
+            height: 7vw;
+            width: 7vw;
+            fill: white;
+        }
+    }
+
+    .footerNav{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        .footeritem{
+            img{
+                height: 7vw;
+                width: 7vw;
+            }
+            .footerIcon{
+                height: 7vw;
+                width: 7vw;
+                color: black;
+                path, g{
+                    fill: black;
+                }
+            }
+        }
     }
 }

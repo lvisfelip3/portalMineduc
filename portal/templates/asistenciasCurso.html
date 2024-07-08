@@ -6,7 +6,9 @@
 <h2 class="headerlink"><a href="{% url 'cursos' id periodo.id %}"></a>Cursos</h2><h2>></h2> <h2 class="headerlink"><a href=""></a>Asistencia</h2>
 {% endif %}
 {%endblock%}
-
+{% block dato %}
+<p class="dato">{{periodo.nombre}}</p><p class="dato">{{curso.nombre}}</p>
+{% endblock %}
 {% block content %}
 {% if perfil.groups_id == 3 %}
 <content>
@@ -27,15 +29,79 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if fechas is not none %}
                     {% for fecha in fechas %}
                     <tr>
                         <td><a href="{% url 'listaAsistencia' id curso.id fecha %}" id="fechascss" style="text-transform: capitalize;">{{fecha}}</a></td>
                         <td><a href="{% url 'eliminarAsistencia' id fecha %}"class="opcion">Eliminar</a></td>
                     </tr>
                     {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td style="font-weight: 500; opacity: .5;">
+                            Este curso Aun no tiene Asistencias registradas
+                        </td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
+
+    <a href="{% url 'listaCursos' id periodo.id %}" class="goBack">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 52 52" 
+            enable-background="new 0 0 52 52" 
+            xml:space="preserve">
+            <path d="M48.6,23H15.4c-0.9,0-1.3-1.1-0.7-1.7l9.6-9.6c0.6-0.6,0.6-1.5,0-2.1l-2.2-2.2c-0.6-0.6-1.5-0.6-2.1,0L2.5,25c-0.6,0.6-0.6,1.5,0,2.1L20,44.6c0.6,0.6,1.5,0.6,2.1,0l2.1-2.1c0.6-0.6,0.6-1.5,0-2.1l-9.6-9.6 C14,30.1,14.4,29,15.3,29 h33.2c0.8,0,1.5-0.6,1.5-1.4v-3C50,23.8,49.4,23,48.6,23z"/>
+        </svg>
+    </a>
+
+    <div class="cardMobile">
+        {% if fechas is not none %}
+        {% for fecha in fechas %}
+        <details name="desplegable">
+            <summary class="nombre">{{fecha}}</summary>
+            <div class="opciones">
+                <a href="{% url 'listaAsistencia' id curso.id fecha %}" style="text-transform: capitalize;" class="opcion"> Editar</a>
+                <a href="{% url 'eliminarAsistencia' id fecha %}" style="text-transform: capitalize;" class="opcion"> Eliminar</a>
+            </div>
+        </details>
+        {% endfor %}
+        {% else %}
+        <span class="noAsistencia">Este Curso Aun no tiene Asistencias</span>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'asistencia' id periodo.id curso.id %}" style="text-decoration: none;">
+        <button id="abrirPopup2" class="pop">
+            <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" 
+                    stroke-width="0">
+                </g>
+                <g id="SVGRepo_tracerCarrier" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round">
+                </g>
+                <g id="SVGRepo_iconCarrier"> 
+                <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" 
+                    stroke="white" 
+                    stroke-width="1.5" 
+                    stroke-linecap="round">
+                </path> 
+                <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" 
+                    stroke="white" 
+                    stroke-width="1.5" 
+                    stroke-linecap="round">
+                </path> 
+                </g>
+            </svg>
+        </button>   
+    </a>
+
 </content>
 {% endblock %}

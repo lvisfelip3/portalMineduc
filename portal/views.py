@@ -43,10 +43,12 @@ def periodo(request, id_user):
     else:
         gruop = Group.objects.get(pk = perfil.groups_id)
         form = crearPeriodo()
-        periodo = Periodo.objects.all()
+        periodos = Periodo.objects.all()
+        periodo = Periodo.objects.get(predeterminado = True)
         if request.method == 'GET':
             return render(request, 'periodo.html',{'form':form,
                                                 'periodo':periodo,
+                                                'periodos':periodos,
                                                 'id':id_user,
                                                 'perfil':perfil,
                                                 'gruop':gruop})
@@ -173,7 +175,7 @@ def editarCursos(request,id_user,curso_id, id_periodo):
     else:
         gruop = Group.objects.get(pk = perfil.groups_id)
         if request.method == 'GET':
-            periodo = Periodo.objects.filter(predeterminado = True)
+            periodo = Periodo.objects.get(predeterminado = True)
             curso = get_object_or_404(Curso, pk=curso_id)
             form = crearCurso(instance=curso)
             return render(request, 'editarCursos.html', {'curso':curso, 
@@ -342,6 +344,7 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
         gruop = Group.objects.get(pk = perfil.groups_id)
         curso = Curso.objects.get(pk = id_curso)
         periodo = Periodo.objects.get(predeterminado=True)
+        cursos = Curso.objects.filter(periodo_id = periodo.id)
         verAsignaturas = get_object_or_404(Asignatura, curso_id=id_curso, pk=asgn_id)
         estudiantes = User.objects.filter(curso_id=id_curso)
         if estudiantes.count() == 0:
@@ -361,7 +364,8 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
                 'perfil':perfil,
                 'gruop':gruop,
                 'estudiantess':estudiantess,
-                'curso':curso
+                'curso':curso,
+                'cursos':cursos
             })
 
         try:
@@ -380,7 +384,8 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
                 'perfil':perfil,
                 'gruop':gruop,
                 'estudiantess':estudiantess,
-                'curso':curso
+                'curso':curso,
+                'cursos':cursos
             })
 
         evaluacion, created = Evaluacion.objects.get_or_create(
@@ -406,8 +411,10 @@ def alumnosNotas(request,id_user,id_curso, asgn_id):
                 'notas':notirijillas,
                 'error': 'Todas las notas están completas',
                 'id':id_user,
+                'perfil':perfil,
                 'estudiantess':estudiantess,
-                'curso':curso
+                'curso':curso,
+                'cursos':cursos
             })
             
 
@@ -473,16 +480,15 @@ def signupEstudiante(request,id_user):
         raise Http404
     else:
         gruop = Group.objects.get(pk = perfil.groups_id)
-        idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
-        curso = Curso.objects.filter(periodo_id=idPeriodoSet[0]['id'])
+        periodo = Periodo.objects.get(predeterminado = True)
+        curso = Curso.objects.filter(periodo_id=periodo.id)
         if request.method == 'GET':
-            idPeriodoSet = Periodo.objects.filter(predeterminado = True).values('id')
-            curso = Curso.objects.filter(periodo_id=idPeriodoSet[0]['id'])
-            return render(request, 'signupEstudiante.html', {"form": estudianteCreation,
+            return render(request, 'signupEstudiante.html', {
                                                             "curso":curso,
                                                             'id':id_user,
                                                             'perfil':perfil,
-                                                            'gruop':gruop})
+                                                            'gruop':gruop,
+                                                            'periodo':periodo})
         else:
             if request.POST['password1'] == request.POST['password2']:
                 try:
@@ -490,11 +496,14 @@ def signupEstudiante(request,id_user):
                     estudiante = Group.objects.filter(name = "Estudiante").values("id")
                     username = request.POST["first_name"][:2]+'.'+request.POST["last_name"]+'E'
                     age = datetime.now().year - año.year
-                    print(username)
+                    cursoId = request.POST["curso"]
+                    if request.POST["curso"] == 0:
+                        cursoId = None
+                    print(cursoId)
                     user = User.objects.create_user( username = username, 
                                                     password=request.POST["password1"],
                                                     edad = age, 
-                                                    curso_id=request.POST["curso"], 
+                                                    curso_id=cursoId, 
                                                     first_name = request.POST["first_name"],
                                                     email = request.POST["email"], 
                                                     last_name = request.POST ["last_name"], 
@@ -506,19 +515,21 @@ def signupEstudiante(request,id_user):
                     user.save()
                     return redirect('perfil_ri',id_user)
                 except IntegrityError:
-                    return render(request, 'signupEstudiante.html', {"form": estudianteCreation, 
+                    return render(request, 'signupEstudiante.html', {
                                                                     "error": "Este nombre de usuario ya existe.",
                                                                     'id':id_user,
                                                                     'perfil':perfil,
                                                                     'gruop':gruop,
-                                                                    'curso':curso})
+                                                                    'curso':curso,
+                                                                    'periodo':periodo})
 
             return render(request, 'signupEstudiante.html', {"form": estudianteCreation, 
                                                             "error": "La contraseña no coincide",
                                                             'id':id_user,
                                                             'perfil':perfil,
                                                             'gruop':gruop,
-                                                            'curso':curso})
+                                                            'curso':curso,
+                                                            'periodo':periodo})
     
 @login_required
 def signupDocente(request,id_user):
@@ -527,11 +538,14 @@ def signupDocente(request,id_user):
         raise Http404
     else:
         gruop = Group.objects.get(pk = perfil.groups_id)
+        periodo = Periodo.objects.get(predeterminado = True)
+        curso = Curso.objects.filter(periodo_id=periodo.id)
         if request.method == 'GET':
             return render(request, 'signupDocente.html', {"form": docenteCreation,
                                                         'id':id_user,
                                                         'perfil':perfil,
-                                                        'gruop':gruop})
+                                                        'gruop':gruop,
+                                                        'periodo':periodo})
         else:
             if request.POST['password1'] == request.POST['password2']:
                 try:
@@ -558,13 +572,15 @@ def signupDocente(request,id_user):
                                                                 "error": "Este nombre de usuario ya existe.",
                                                                 'id':id_user,
                                                                 'perfil':perfil,
-                                                                'gruop':gruop})
+                                                                'gruop':gruop,
+                                                                'periodo':periodo})
 
             return render(request, 'signupDocente.html', {"form": docenteCreation, 
                                                         "error": "La contraseña no coincide",
                                                         'id':id_user,
                                                         'perfil':perfil,
-                                                        'gruop':gruop}) 
+                                                        'gruop':gruop,
+                                                        'periodo':periodo}) 
 
 @login_required
 def signupRI(request,id_user):
@@ -573,11 +589,14 @@ def signupRI(request,id_user):
         raise Http404
     else:
         gruop = Group.objects.get(pk = perfil.groups_id)
+        periodo = Periodo.objects.get(predeterminado = True)
+        curso = Curso.objects.filter(periodo_id=periodo.id)
         if request.method == 'GET':
             return render(request, 'signupRI.html', {"form": RICreation,
                                                     'id':id_user,
                                                     'perfil':perfil,
-                                                    'gruop':gruop})
+                                                    'gruop':gruop,
+                                                    'periodo':periodo})
         else:
             if request.POST['password1'] == request.POST['password2']:
                 try:
@@ -602,13 +621,15 @@ def signupRI(request,id_user):
                                                             "error": "Este nombre de usuario ya existe.",
                                                             'id':id_user,
                                                             'perfil':perfil,
-                                                            'gruop':gruop})
+                                                            'gruop':gruop,
+                                                            'periodo':periodo})
 
             return render(request, 'signupRI.html', {"form": RICreation, 
                                                     "error": "La contraseña no coincide",
                                                     'id':id_user,
                                                     'perfil':perfil,
-                                                    'gruop':gruop}) 
+                                                    'gruop':gruop,
+                                                    'periodo':periodo}) 
     
 @login_required
 def signout(request):
@@ -816,6 +837,7 @@ def horarioPorCurso(request, id_user, id_periodo, id_curso):
             return render(request, 'verHorarioCurso.html',{'curso':curso,
                                                         'periodo':periodo,
                                                         'perfil':perfil,
+                                                        'id':perfil.id,
                                                         'gruop':gruop,
                                                         'cursos':cursosOpcion,
                                                         'calendario':calendario,

@@ -6,6 +6,9 @@
 <h2 class="headerlink"><a href="{% url 'cursos' id periodo.id %}"></a>Cursos</h2><h2>></h2> <h2 class="headerlink"><a href="{% url 'asistenciasCurso' id periodo.id curso.id %}"></a>Asistencia</h2>
 {% endif %}
 {%endblock%}
+{% block dato %}
+<p class="dato">{{periodo.nombre}}</p><p class="dato">{{curso}}</p>
+{% endblock %}
 {% block content %}
 {% if perfil.groups_id == 3 %}
 <content>
@@ -38,6 +41,47 @@
                 </table>
             </div>
         </form>
+    </div>
+
+    <button id="abrirPopup2" class="pop" type="submit" form="formMobile">
+        <svg 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" 
+                stroke-width="0">
+            </g>
+            <g id="SVGRepo_tracerCarrier" 
+                stroke-linecap="round" 
+                stroke-linejoin="round">
+            </g>
+            <g id="SVGRepo_iconCarrier"> 
+            <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" 
+                stroke="white" 
+                stroke-width="1.5" 
+                stroke-linecap="round">
+            </path> 
+            <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" 
+                stroke="white" 
+                stroke-width="1.5" 
+                stroke-linecap="round">
+            </path> 
+            </g>
+        </svg>
+    </button>
+
+    <div class="cardMobile">
+        {% for estudiante in estudiantes %}
+        <form method="POST" id="formMobile" class="registroAsistencia">
+            {% csrf_token %}
+            <div class="fecha">{{fecha}}</div>
+            <label class="est">
+                <span>{{estudiante.first_name}} {{estudiante.last_name}}</span>
+                <input type="checkbox" class="asistencia" name = "asistio_{{ estudiante.id }}" id="asistio_{{ estudiante.id }}">
+            </label>
+            </div>
+        </form>
+        {% endfor %}
     </div>
 </content>
 {% endblock %}

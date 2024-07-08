@@ -6,7 +6,9 @@
 <h2 class="headerlink"><a href=""></a>Asistencia</h2>
 {% endif %}
 {%endblock%}
-
+{% block dato %}
+<p class="dato">{{periodo.nombre}}</p><p class="dato">Asistencia</p>
+{% endblock %}
 {% block content %}
 {% if perfil.groups_id == 3 %}
 <content>
@@ -33,6 +35,12 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="cardMobile">
+        {% for c in cursos %}
+        <a href="{% url 'asistenciasCurso' id c.periodo_id  c.id %}" class="listaCursos">{{c.nombre}} <span>{{c.seccion}}</span> </a>
+        {% endfor %}
     </div>
 </content>
 {% endblock %}

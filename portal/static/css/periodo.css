@@ -397,6 +397,65 @@ dialog button:hover{
         }
     }
 }
+
+.cardMobile{
+    display: none;
+}
+
+.pop{
+    display: none;
+}
+
+.goBack{
+    display: none;
+}
+
+.dropdown{
+    display: inline-block;
+    cursor: default;
+    .rotate{
+        display: inline-block;
+        transition: 70ms all;
+    }
+    .items{
+        display: none;
+        position: absolute;
+        background-color: #e9e6ff;
+        padding: 12px 20px;
+        border-radius: 5px;
+        transition: 100ms all;
+        a{
+            display: block;
+            color: #222a30;
+            &:hover{
+                color: #593cff;
+            }
+        }
+
+        h1{
+            font-size: 20px;
+            margin: 0;
+        }
+    }
+    span{
+        font-size: 20px;
+    }
+    &:hover{
+        .rotate{
+            transform: rotate(90deg);
+        }
+        .items{
+            display: block;
+        }
+    }
+}
+.footerNav{
+    display: none;
+}
+.logo{
+    display: none;
+}
+
 @media (max-width: 1500px){
 
     body {
@@ -517,6 +576,13 @@ dialog button:hover{
         display: grid;
         grid-template-columns: 10vw 1fr 10vw;
         grid-template-areas: "img info hamburger";
+        img{
+            display: none;
+        }
+        .logo{
+            grid-area: img;
+            display: block;
+        }
         h2{
             display: none;
         }
@@ -527,6 +593,14 @@ dialog button:hover{
             align-items: center;
             font-size: 5vw;
             font-weight: 600;
+            gap: 10px;
+            p{
+                margin: 0;
+                background-color: #7d67ff;
+                color:white;
+                border-radius: 5px;
+                padding: 5px;
+            };
         }
         .bloque{
             display: none;
@@ -569,6 +643,15 @@ dialog button:hover{
             width: 100%;
             gap: 10px;
             transition: 200ms all;
+            .noAsignatura{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                background-color: rgb(255, 255, 255);
+                border-radius: 5px;
+                font-size: 5vw;
+            }
             details{
                 background-color: rgb(230, 230, 230);
                 border-radius: 8px;
@@ -587,6 +670,7 @@ dialog button:hover{
                         border-radius: 5px;
                         padding: 2px 7px;
                         color: white;
+                        font-size: 3vw;
                     }
                 }
                 .opciones{
@@ -600,11 +684,12 @@ dialog button:hover{
                         border-radius: 3px;
                         color: white;
                         padding: 10px;
+                        font-weight: 600;
                         &:first-child{
                             background-color: #222a30;
                         }
                         &:nth-child(2){
-                            background-color: #008f37;
+                            background-color: #09f;
                         }
                         &:last-child{
                             background-color: #9c0141;
@@ -625,17 +710,68 @@ dialog button:hover{
         right: 5px;
         background-color: #222a30;
         border-radius: 5px;
-        margin: 20px 0 0 0;
+        margin: 30px 0 0 0;
         padding: 10px;
         border: none;
         height: min-content;
         width: min-content;
         svg{
-            height: 8vw;
-            width: 8vw;
+            height: 7vw;
+            width: 7vw;
         }
         &:hover{
             background-color: #4b4da5;
+        }
+    }
+
+    .goBack{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #222a30;
+        border-radius: 5px;
+        position: fixed;
+        top: 12vw;
+        left: 5px;
+        height: min-content;
+        width: min-content;
+        padding: 10px;
+        margin-top: 30px;
+        svg{
+            height: 7vw;
+            width: 7vw;
+            fill: white;
+        }
+    }
+    .footerNav{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        .footeritem{
+            img{
+                height: 7vw;
+                width: 7vw;
+            }
+            .footerIcon{
+                height: 7vw;
+                width: 7vw;
+                color: black;
+                path, g{
+                    fill: black;
+                }
+            }
+            &:nth-child(4){
+                fill: black;
+                path{
+                    fill: none;
+                    stroke: black;
+                }
+            }
         }
     }
 }

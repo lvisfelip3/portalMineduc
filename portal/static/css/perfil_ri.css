@@ -227,9 +227,45 @@ content{
 dialog{
     border: 1px solid #ccc;
     padding: 20px;
-    text-align: left;
-    align-content: center;
     border-radius: 5px;
+}
+
+dialog[open]{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    .crearCuenta{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #222a30;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        width: 100px;
+        font-size: 20px;
+        gap: 5px;
+        padding: 10px;
+        font-weight: 500;
+        transition: 100ms all;
+        .cuentaSVG{
+            fill: white;
+            height: 60px;
+            width: 60px;
+            path{
+                fill: white;
+            }
+        }
+        .cuenta{
+            text-align: center;
+        }
+        &:hover, &:focus{
+            background-color: #593cff;
+            transform: scale(104%);
+        }
+    }
 }
 
 dialog::backdrop{
@@ -275,6 +311,18 @@ dialog::backdrop{
             display: block;
         }
     }
+}
+
+.cardMobile{
+    display: none;
+}
+.logo{
+    display: none;
+}
+
+
+.footerNav{
+    display: none;
 }
 
 @media (max-width: 1500px){
@@ -379,6 +427,10 @@ dialog::backdrop{
     }
 }
 
+.hamburger{
+    display: none;
+}
+
 @media (max-width: 1000px){
     aside{
         display: none;
@@ -425,6 +477,13 @@ dialog::backdrop{
         display: grid;
         grid-template-columns: 10vw 1fr 10vw;
         grid-template-areas: "img info hamburger";
+        img{
+            display: none;
+        }
+        .logo{
+            grid-area: img;
+            display: block;
+        }
         h2{
             display: none;
         }
@@ -450,6 +509,11 @@ dialog::backdrop{
         }
     }
 
+    dialog[open]{
+        flex-direction: column;
+        gap: 20px;
+    }
+
     content{
         grid-area: content;
         position: relative;
@@ -457,8 +521,8 @@ dialog::backdrop{
         display:flex;
         flex-direction: column;
         grid-area: content;
-        padding: 0;
-        margin-top: 10vw;
+        padding:0 0 100px 0;
+        margin: 10vw 0;
 
         .card{
             width: 100%;
@@ -491,5 +555,36 @@ dialog::backdrop{
 
     aside.active {
         display: grid;
+    }
+    .footerNav{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        .footeritem{
+            img{
+                height: 7vw;
+                width: 7vw;
+            }
+            .footerIcon{
+                height: 7vw;
+                width: 7vw;
+                color: black;
+                path, g{
+                    fill: black;
+                }
+            }
+            &:nth-child(4){
+                fill: black;
+                path{
+                    fill: none;
+                    stroke: black;
+                }
+            }
+        }
     }
 }

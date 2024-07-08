@@ -499,6 +499,17 @@ dialog::backdrop{
     display: none;
 }
 
+.goBack{
+    display: none;
+}
+.logo{
+    display: none;
+}
+
+.footerNav{
+    display: none;
+}
+
 @media (max-width: 1500px){
 
     body {
@@ -639,7 +650,64 @@ dialog::backdrop{
     }
 
     header{
-        display: none;
+        z-index: 10;
+        width: 100%;
+        top: 0;
+        padding: 5px 10px;
+        position: fixed;
+        display: grid;
+        grid-template-columns: 10vw 1fr 10vw;
+        grid-template-areas: "img info hamburger";
+        img{
+            display: none;
+        }
+        .logo{
+            grid-area: img;
+            display: block;
+        }
+        img{
+            display: none;
+        }
+        h2{
+            display: none;
+        }
+        .datos{
+            grid-area: info;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5vw;
+            font-weight: 600;
+            gap: 10px;
+            p{
+                margin: 0;
+                background-color: #7d67ff;
+                color:white;
+                border-radius: 5px;
+                padding: 5px;
+            };
+        }
+        .bloque{
+            display: none;
+        }
+        .logo{
+            grid-area: img;
+            display: block;
+        }
+        .hamburger{
+            grid-area: hamburger;
+            display: flex;
+            background-color: white;
+            border-radius: 5px;
+            height: min-content;
+            width: min-content;
+            justify-content: center;
+            align-items: center;
+            svg{
+                height: 12vw;
+                width: 12vw;
+            }
+        }
     }
 
     .card{
@@ -659,23 +727,6 @@ dialog::backdrop{
         background: linear-gradient(to right, #cfd5d8, #768a9c);
         scroll-behavior: smooth;
         overflow-x: hidden;
-    }
-
-    .hamburger{
-        display: flex;
-        position: fixed;
-        top: 5px;
-        right: 5px;
-        background-color: white;
-        border-radius: 5px;
-        height: min-content;
-        width: min-content;
-        justify-content: center;
-        align-items: center;
-        svg{
-            height: 12vw;
-            width: 12vw;
-        }
     }
 
     aside.active {
@@ -736,8 +787,8 @@ dialog::backdrop{
         display: flex;
         flex-direction: column;
         position: relative;
-        padding: 0 0 40px 0;
-        margin-top: 50px;
+        padding: 0 0 100px 0;
+        margin-top: 11vw;
         .header {
             font-weight: 700;
             height: 70px;
@@ -748,7 +799,7 @@ dialog::backdrop{
             width: 100%;
             font-size: 35px;
             position: sticky;
-            top: 70px;
+            top: 14vw;
             border-radius: 5px;
             z-index: 1;
         }
@@ -871,17 +922,69 @@ dialog::backdrop{
         right: 5px;
         background-color: #222a30;
         border-radius: 5px;
-        margin: 20px 0 0 0;
+        margin: 30px 0 0 0;
         padding: 10px;
         border: none;
         height: min-content;
         width: min-content;
         svg{
-            height: 8vw;
-            width: 8vw;
+            height: 7vw;
+            width: 7vw;
         }
         &:hover{
             background-color: #4b4da5;
+        }
+    }
+
+    .goBack{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #222a30;
+        border-radius: 5px;
+        position: fixed;
+        top: 12vw;
+        left: 5px;
+        height: min-content;
+        width: min-content;
+        padding: 10px;
+        margin-top: 30px;
+        svg{
+            height: 7vw;
+            width: 7vw;
+            fill: white;
+        }
+    }
+    .footerNav{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        z-index: 100;
+        .footeritem{
+            img{
+                height: 7vw;
+                width: 7vw;
+            }
+            .footerIcon{
+                height: 7vw;
+                width: 7vw;
+                color: black;
+                path, g{
+                    fill: black;
+                }
+            }
+            &:nth-child(4){
+                fill: black;
+                path{
+                    fill: none;
+                    stroke: black;
+                }
+            }
         }
     }
 }
