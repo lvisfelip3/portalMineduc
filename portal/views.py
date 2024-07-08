@@ -18,20 +18,26 @@ def login(request):
 
 def index(request):
     try:
-        User.objects.get(groups_id = 3)
-    except User.DoesNotExist:
-        User.objects.create_user(groups_id = 3,
-                                 username = 'PortalMineduc',
-                                 first_name = 'Portal',
-                                 last_name = 'Mineduc',
-                                 fecha_nacimiento = None,
-                                 edad = None,
-                                 direccion = None,
-                                 telefono = None,
-                                 password = 'PortalMineduc123'
-                                )
-        print("Usuario creado con exito")
-    return render(request,'index.html')
+        Group.objects.all()
+    except Group.DoesNotExist:
+        Group.objects.create(nombre = 'Estudiante')
+        Group.objects.create(nombre = 'Docente')
+        Group.objects.create(nombre = 'Responsable Institucional')
+        try:
+            User.objects.get(groups_id = 3)
+        except User.DoesNotExist:
+            User.objects.create_user(groups_id = 3,
+                                    username = 'PortalMineduc',
+                                    first_name = 'Portal',
+                                    last_name = 'Mineduc',
+                                    fecha_nacimiento = None,
+                                    edad = None,
+                                    direccion = None,
+                                    telefono = None,
+                                    password = 'PortalMineduc123'
+                                    )
+            print("Usuario creado con exito")
+        return render(request,'index.html')
 #-----------------------------
 #--------- PERIODO -----------
 #-----------------------------
