@@ -211,6 +211,10 @@ content{
     grid-area: inasistencias;
 }
 
+.espacio{
+    display: none;
+}
+
 .logo{
     display: none;
 }

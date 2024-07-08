@@ -9,6 +9,23 @@
 </head>
 <body>
     <header>
+        <div class="hamburger" id="toggleAside">
+            <svg
+            viewBox="0 0 24 24" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6h16M4 12h16M4 18h16" 
+            stroke="#000" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="datos">
+            {% block dato %}
+            <p class="dato">Registro Estudiante</p>
+            {% endblock %}
+        </div>
         <div class="links">
             {% block links %}<h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2> > </h2> <h2 class="headerlink"><a href="{% url 'signupEstudiante' id %}"></a>Registrar Estudiante</h2>{% endblock %}
         </div>
@@ -21,7 +38,7 @@
         <img src="{% static 'img/logo.webp' %}" class="logo">
     </header>
 
-    <aside>
+    <aside id="nav">
         <img src="{% static 'img/logotop.jpg' %}" alt="">
         <span><strong>Mineduc</strong> Portal</span>
         <div class="bloque">
@@ -65,7 +82,6 @@
     </aside>
 
     <content>
-        {% block content %}
         <div class="card">
             {{error}}
 
@@ -108,19 +124,19 @@
                     </label>
                 </div>
                 <div class="botones">
+                    {% block botones %}
                     <label>Curso:
                         <select name="curso">
-                            <option value="NULL">Sin Curso</option>
                             {% for c in curso %}
                             <option value={{c.id}}>{{c.nombre}}</option>
                             {% endfor %}
                         </select>
                     </label>
+                    {% endblock %}
                     <button type="submit">Crear</button>
                 </div>
             </form>
         </div>
-        {% endblock %}
     </content>
     <div class="footerNav">
         <a href="{% url 'perfil_ri' id %}" class="footeritem">
@@ -169,5 +185,6 @@
         </a>
     </div>
 <script src="{% static 'js/img.js' %}"></script>
+<script src="{% static 'js/navbarOpen.js' %}"></script>
 </body>
 </html>

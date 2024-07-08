@@ -150,10 +150,16 @@ header a:first-child{
 content{
     grid-area: content;
     background: linear-gradient(to right, #cfd5d8, #768a9c);
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row: 1fr;
     justify-content: center;
     align-items: center;
     padding:50px 100px 50px 100px;
+    max-height: 100dvh;
+    overflow-y: auto;
+    width: 100%;
+    position: relative;
 }
 
 .card {
@@ -165,7 +171,6 @@ content{
     height: 100%;
     padding: 30px;
     box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
-    position: relative;
     form{
         display: grid;
         grid-template-columns: 1fr 500px;
@@ -273,12 +278,16 @@ content{
         align-items: center;
         gap: 20px;
         padding: 20px;
+        label{
+            font-size: 25px;
+        }
         select{
             border: 0;
             outline: 1px solid #ccc;
             height: 30px;
             width: 70%;
             border-radius: 5px;
+            font-size: 25px;
         }
         button{
             font-size: 25px;
@@ -296,6 +305,9 @@ content{
     }
 }
 
+.espacio{
+    display: none;
+}
 
 .helptext{
     display: none;
@@ -308,6 +320,15 @@ content{
 .logo{
     display: none;
 }
+
+.hamburger{
+    display: none;
+}
+
+.datos{
+    display: none;
+}
+
 
 
 @media (max-width: 1500px){
@@ -372,5 +393,229 @@ content{
         color: black;
         display: block;
         margin: 3px;
+    }
+
+    header .headerlink{
+        margin-left: 0;
+    }
+
+    content{
+        padding:40px 70px;
+    }
+    
+    .card {
+        width: 100%;
+        height: min-content;
+        padding: 10px;
+        form{
+            grid-template-columns: 1fr 200px;
+            label{
+                font-size: 15px;
+            }
+            input{
+                height: 20px;
+                font-size: 70%;
+            }
+        }
+        .foto{
+            padding: 20px;
+            span{
+                font-size: 15px;
+            }
+            .drag{
+                gap: 10px;
+                height: 150px;
+                width: 150px;
+                font-size: 15px;
+                i{
+                    font-size: 10px;
+                }
+                span{
+                    font-size: 13px;
+                }
+            }
+        }
+    
+        .credencial{
+            grid-area: form2;
+            padding: 20px;
+            justify-content: flex-start;
+        }
+        .botones{
+            justify-content: flex-end;
+            align-items: stretch;
+            gap: 10px;
+            padding: 20px;
+            label{
+                font-size: 15px;
+            }
+            select{
+                width: 100%;
+                font-size: 15px;
+            }
+            button{
+                font-size: 25px;
+                padding: 14px;
+                border: 0;
+            }
+        }
+    }
+    
+}
+
+@media (max-width: 1000px){
+    aside{
+        display: none;
+        position: fixed;
+        right: 0;
+        min-height: 100dvh;
+        z-index: 100;
+        img{
+            width: 160px;
+            height: 20px;
+            justify-self: center;
+        }
+        span{
+            font-size: 6vw;
+        }
+
+        .lista{
+            font-size: 30px;
+            gap: 10px;
+        }
+        .dropdown{
+            .items{
+                width: 200px;
+            }
+        }
+    }
+
+    body {
+        grid-template-columns: 1fr 5fr 1fr;
+        grid-template-rows: 50px 1fr;
+        grid-template-areas: ". . ."
+                             ". content .";
+        background: linear-gradient(to right, #cfd5d8, #768a9c);
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    
+    header{
+        z-index: 10;
+        width: 100%;
+        top: 0;
+        padding: 5px 10px;
+        position: fixed;
+        display: grid;
+        grid-template-columns: 10vw 1fr 10vw;
+        grid-template-areas: "img info hamburger";
+        img{
+            display: none;
+        }
+        .logo{
+            grid-area: img;
+            display: block;
+        }
+        h2{
+            display: none;
+        }
+        .datos{
+            grid-area: info;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5vw;
+            font-weight: 600;
+            gap: 10px;
+            p{
+                margin: 0;
+                background-color: #7d67ff;
+                color:white;
+                border-radius: 5px;
+                padding: 5px;
+            };
+        }
+        .bloque{
+            display: none;
+        }
+        .hamburger{
+            grid-area: hamburger;
+            display: flex;
+            background-color: white;
+            border-radius: 5px;
+            height: min-content;
+            width: min-content;
+            justify-content: center;
+            align-items: center;
+            svg{
+                height: 12vw;
+                width: 12vw;
+            }
+        }
+    }
+
+    content{
+        grid-area: content;
+        position: relative;
+        background: none;
+        display:flex;
+        flex-direction: column;
+        grid-area: content;
+        padding: 0;
+        padding-bottom: 70px;
+        overflow-y: visible;
+        margin: 140px 0;
+
+        .card{
+            form{
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-areas: "form "
+                                     "form2"
+                                     "img"
+                                     "button";
+            }
+        }
+    }
+
+    aside.active {
+        display: grid;
+    }
+
+    .espacio{
+        display: none;
+    }
+
+    .footerNav{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        .footeritem{
+            img{
+                height: 7vw;
+                width: 7vw;
+            }
+            .footerIcon{
+                height: 7vw;
+                width: 7vw;
+                color: black;
+                path, g{
+                    fill: black;
+                }
+            }
+            &:nth-child(4){
+                fill: black;
+                path{
+                    fill: none;
+                    stroke: black;
+                }
+            }
+        }
     }
 }

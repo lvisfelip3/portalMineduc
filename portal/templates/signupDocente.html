@@ -1,16 +1,8 @@
 {% extends 'signupEstudiante.html' %}
 
 {% block links %}<h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2> > </h2> <h2 class="headerlink"><a href="{% url 'signupDocente' id %}"></a>Registrar Docente</h2>{% endblock %}
-
-{% block content %}
-<h1>soy docente</h1>
-        <div class="card">
-            {{error}}
-
-            <form method="POST">
-                {% csrf_token %}
-                {{form}}
-                <button>Crear</button>
-            </form>
-        </div>
+{% block dato %}
+<p class="dato">Registro Docente</p>
+{% endblock %}
+{% block botones %}
 {% endblock %}
