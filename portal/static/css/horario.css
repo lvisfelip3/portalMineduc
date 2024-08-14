@@ -234,7 +234,9 @@ content .card {
             }
             .conRamo,
             .sinRamo {
-                display: block;
+                display: flex;
+                align-items: center;
+                height: 100%;
                 font-size: 2vh;
                 overflow: hidden;
                 font-weight: 500;

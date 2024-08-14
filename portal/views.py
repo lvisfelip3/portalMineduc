@@ -52,6 +52,7 @@ def periodo(request, id_user):
         gruop = Group.objects.get(pk = perfil.groups_id)
         form = crearPeriodo()
         periodos = Periodo.objects.all()
+        countPeriodos = periodos.count()
         periodo = Periodo.objects.get(predeterminado = True)
         if request.method == 'GET':
             return render(request, 'periodo.html',{'form':form,
@@ -59,7 +60,8 @@ def periodo(request, id_user):
                                                 'periodos':periodos,
                                                 'id':id_user,
                                                 'perfil':perfil,
-                                                'gruop':gruop})
+                                                'gruop':gruop,
+                                                'countPeriodos':countPeriodos})
         else:
             try:
                 form = crearPeriodo(data = request.POST)
@@ -806,7 +808,7 @@ def registrarAsistencia(request,id_user,id_periodo,id_curso):
         else:
             for estudiante in estudiantes:
                 asistio = request.POST.get(f'asistio_{estudiante.id}', 'off') == 'on'
-                #fecha_custom = '11-05-2024'
+                #fecha_custom = '07-07-2024'
                 Asistencia.objects.create(
                     fecha=datetime.now().date(),
                     #fecha = datetime.strptime(fecha_custom,'%d-%m-%Y').date(),

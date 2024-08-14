@@ -87,10 +87,10 @@
     </a>
 
     <div class="cardMobile">
-        {% for estudiante in estudiantes %}
         <form method="POST" id="formMobile" class="registroAsistencia">
             {% csrf_token %}
             <div class="fecha">{{fechaMostrable}}</div>
+            {% for estudiante in estudiantes %}
             <label class="est">
                 <span>{{estudiante.first_name}} {{estudiante.last_name}}</span>
                 {% for asistencia in asistencia_existente %}
@@ -99,9 +99,9 @@
                     {% endif %}
                 {% endfor %}
             </label>
+            {% endfor %}
             </div>
         </form>
-        {% endfor %}
     </div>
 </content>
 {% endblock %}

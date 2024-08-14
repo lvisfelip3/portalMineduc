@@ -70,18 +70,17 @@
         </svg>
     </button>
 
-    <div class="cardMobile">
-        {% for estudiante in estudiantes %}
+    <div class="cardMobile" >
         <form method="POST" id="formMobile" class="registroAsistencia">
-            {% csrf_token %}
-            <div class="fecha">{{fecha}}</div>
+        {% csrf_token %}
+        <div class="fecha">{{fecha}}</div>
+        {% for estudiante in estudiantes %}
             <label class="est">
                 <span>{{estudiante.first_name}} {{estudiante.last_name}}</span>
                 <input type="checkbox" class="asistencia" name = "asistio_{{ estudiante.id }}" id="asistio_{{ estudiante.id }}">
             </label>
-            </div>
-        </form>
         {% endfor %}
+        </form>
     </div>
 </content>
 {% endblock %}

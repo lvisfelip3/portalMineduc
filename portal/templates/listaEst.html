@@ -1,5 +1,5 @@
 {% extends 'verCursos.html' %}
-
+{% load static %}
 {%block links%}
 {% if perfil.groups_id == 3 %}
 <h2 class="headerlink"><a href="{% url 'perfil_ri' id %}"></a>Académico</h2> <h2>></h2> <h2 class="headerlink"><a href="{% url 'cursos' id periodo.id%}"></a>Cursos</h2>
@@ -61,4 +61,7 @@
     </dialog>
     
 </content>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/dialog2.js' %}"></script>
 {% endblock %}

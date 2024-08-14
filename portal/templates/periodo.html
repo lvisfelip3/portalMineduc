@@ -107,7 +107,10 @@
                             <td>{{p.fecha_inicio}}</td>
                             <td>{{p.fecha_fin}}</td>
                             <td><a href="{% url 'editarPeriodo' id p.id %}"class="opcion">Editar</a>
+                                {% if countPeriodos > 1 %}
                                 <a href="{% url 'eliminarPeriodo' id p.id %}"class="opcion" id="eliminarPeriodo">Eliminar</a></td>
+                                {% else %}
+                                {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
